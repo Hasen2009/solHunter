@@ -1,4 +1,6 @@
-// import { Connection, PublicKey, clusterApiUrl } from '@solana/web3.js';
+import { Connection, PublicKey, clusterApiUrl } from '@solana/web3.js';
+import axios from 'axios';
+
 // import {LIQUIDITY_STATE_LAYOUT_V4} from '@raydium-io/raydium-sdk';
 // import chalk from 'chalk';
 
@@ -6,7 +8,56 @@
 // const RPC_WEBSOCKET_ENDPOINT ='wss://api.mainnet-beta.solana.com';
 // // // raydium pool created account
 
-// const solanaConnection = new Connection('https://mainnet.helius-rpc.com/?api-key=0d39621b-9712-47e4-92c8-24065ae41685');
+const solanaConnection = new Connection('https://mainnet.helius-rpc.com/?api-key=0d39621b-9712-47e4-92c8-24065ae41685');
+
+async function checkRayHolding(tokenAddress){
+  let token = new PublicKey(tokenAddress);
+  let address = new PublicKey('5Q544fKrFoe6tsEbD7S8EmxGTJYAKtTVhAW5Q5pge4j1')
+  try{
+
+    let rayHolding = await solanaConnection.getParsedTokenAccountsByOwner (address,
+      {
+        mint: token,
+      },
+      {
+        encoding: "jsonParsed",
+      }
+      );
+      let rayAmount = rayHolding.value[0].account.data.parsed.info.tokenAmount.uiAmount;
+      return ( rayAmount > 0 )  ? rayAmount : 0;
+  }catch(err){
+    console.log(err.message);
+  }
+}
+
+async function topHolders(tokenAdress){
+  let token = new PublicKey(tokenAdress);
+  let address = new PublicKey('5Q544fKrFoe6tsEbD7S8EmxGTJYAKtTVhAW5Q5pge4j1')
+  try{
+    let top10Holders = (await solanaConnection.getTokenLargestAccounts (token ,'finalized')).value.slice(0,10);
+    let topHoldersAmount = 0;
+    top10Holders.forEach((account)=>{
+      topHoldersAmount += account.uiAmount;
+    })
+    return (topHoldersAmount > 0) ? topHoldersAmount : 0 ;
+  }catch(err){
+    console.log(err.message);
+  }
+}
+
+async function tokenSupply(tokenAddress){
+  try{
+    let token = new PublicKey(tokenAddress);
+
+    const supply = await solanaConnection.getTokenSupply(
+      token,'confirmed', 
+    );
+    console.log(supply.value.uiAmount)
+  }catch(err){
+    console.table(err.message,tokenAddress);
+  }
+}
+tokenSupply('kFjbSyZMNRqjmVhL9T8XuZju3g8ocTegJxUUPVdpump');
 // import { Helius } from "helius-sdk";
 
 // const helius = new Helius("0d39621b-9712-47e4-92c8-24065ae41685");
@@ -136,27 +187,28 @@
 //   */
 // })();
 
-const authToken = '7244419453:AAFqYKkmNY2O_QrQrzMXpN8VC3YvvfR1xok';
+// const authToken = '7244419453:AAFqYKkmNY2O_QrQrzMXpN8VC3YvvfR1xok';
 // const chat_id = '45717611' //bot id;
-const chat_id = "-1002198435565" ; // group
 
-export async function sendTelegramMsg ()  {
-    const url = `https://api.telegram.org/bot${authToken}/sendMessage`;
-    const payload = {
-        chat_id: chat_id,
-        disable_web_page_preview  : true,
-        text: "<b>${token.name} #${token.symbol}</b>",
-        parse_mode: 'html' // html | markdown
-    }
-    try {
-        let res = await fetch(url, {
-          method : 'POST',
-          body : JSON.stringify(payload)
-        })
-        console.log(res)
-    }catch(err){
-        console.log(err.message);
-    }
-}
+// const chat_id = "-1002198435565" ; // group
 
-sendTelegramMsg()
+// export async function sendTelegramMsg ()  {
+//     const url = `https://api.telegram.org/bot${authToken}/sendMessage`;
+//     const payload = {
+//         chat_id: chat_id,
+//         disable_web_page_preview  : true,
+//         text: "<b>${token.name} #${token.symbol}</b>",
+//         parse_mode: 'html' // html | markdown
+//     }
+//     try {
+//         let res = await fetch(url, {
+//           method : 'POST',
+//           body : JSON.stringify(payload)
+//         })
+//         console.log(res)
+//     }catch(err){
+//         console.log(err.message);
+//     }
+// }
+
+// sendTelegramMsg()

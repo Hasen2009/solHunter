@@ -39,5 +39,5 @@ export function replaceData(dataPath, leftData) {
 export function tokenTimeCheck(time){
     let currentTime = Math.ceil(Date.parse(new Date().toISOString())/1000);
     let tokenTime = Math.ceil(Date.parse(time)/1000);
-    return (currentTime - tokenTime >= 300) ? true : false;
+    return (currentTime - tokenTime >= 600) ? true : false;
 }

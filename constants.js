@@ -13,3 +13,17 @@ export const solanaConnection = new Connection(RPC_ENDPOINT, {
 export const rayFee = new PublicKey(
   '7YttLkHDoNj9wyDur5pM1ejNaAvT9X4eqaYcHQqtj2G5'
 );
+
+const pumpFun = "39azUYFWPz3VHgKCf3VChUwbpURdCHRxjWVowf5jUJjg";
+const moonShot = "CGsqR7CTqTwbmAUTPnfg9Bj9GLJgkrUD9rhjh3vHEYvh";
+
+const platformsSigners = {
+  pumpFun,
+  moonShot
+}
+
+export function getTokenPlatform(signer){
+  let platform = Object.keys(platformsSigners).find(key => platformsSigners[key] === signer);
+  return (platform != undefined) ? platform : false;
+}
+// console.table(Object.keys(platformsSigners).find(key => platformsSigners[key] === 'pumpFun'))

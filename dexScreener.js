@@ -5,13 +5,15 @@ import chalk from 'chalk';
 import axios from 'axios';
 import { storeData,replaceData,tokenTimeCheck } from './utils.js';
 import { sendTelegramMsg } from './tgBot.js'
-
-
+import { findTotalHolders } from './findTotalHolders.js'
+import { holdersPercentage } from './holders.js';
 
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
 const __dirname = path.dirname(__filename); // get the name of the directory
 const dataPath = path.join(__dirname, 'data', 'new_solana_tokens.json');
-// const botPath = path.join(__dirname, 'data', 'bot_results.json');
+const botPath = path.join(__dirname, 'data', 'bot_results.json');
+const rejectedTokensPath = path.join(__dirname, 'data', 'rejected_tokens.json');
+
 const http = axios.create({
     baseURL : 'https://api.dexscreener.com/latest/dex'
 })
@@ -29,44 +31,65 @@ async function checkToken(tokenStoredData,token){
                 'q' : token
             }
         });
-        // let tokenAccounts = await findTotalHolders(token);
         // filtering token data from api response
         let pair = tokenData.data.pairs[0];
         let tokenProps = {
-            address: pair.baseToken.address,
-            name : pair.baseToken.name,
-            symbol : pair.baseToken.symbol,
-            url : pair.url,
-            txn24: parseInt(pair.txns.h24.buys),
-            volume : parseInt(pair.volume.h24),
-            priceChange : parseInt(pair.priceChange.h24),
-            liquidity : parseInt(pair.liquidity.usd),
-            fdv : parseInt(pair.fdv),
-            mc: (parseInt(pair.fdv)/1000) +"K",
-            // tokenAccounts : tokenAccounts,
-            // ratio : (tokenAccounts > 0) ? Math.floor(parseInt(pair.fdv)/tokenAccounts)  : 0
-        }
+                address: pair.baseToken.address,
+                name : pair.baseToken.name,
+                symbol : pair.baseToken.symbol,
+                poolKey : tokenStoredData.pool_key,
+                platform : tokenStoredData.platform,
+                url : pair.url,
+                txn24: parseInt(pair.txns.h24.buys),
+                volume : parseInt(pair.volume.h24),
+                volume5m : parseInt(pair.volume.m5),
+                priceChange : parseInt(pair.priceChange.h24),
+                priceChange5m : parseInt(pair.priceChange.m5),
+                liquidity : parseInt(pair.liquidity.usd),
+                fdv : parseInt(pair.fdv),
+                mc: (parseInt(pair.fdv)/1000) +"K",
+                tokenAccounts : 0,
+                ratio : 0,
+                supply : 0,
+                rayPct : 0,
+                top10Pct : 0
+            }
         // token detection algorithim 
-        if (tokenProps.fdv > 10000 && tokenProps.volume > 20000 && tokenProps.txn24 > 300 ){
-            // await storeData(botPath,tokenProps);
-            await sendTelegramMsg(tokenProps);
-            let displayData = [
-                tokenProps
-            ]
-            console.table(displayData);
+        if (tokenProps.fdv > 20000 && tokenProps.txn24 > 200){
+            let tokenAccounts = await findTotalHolders(token);
+            let holdersPercentages = await holdersPercentage(token);
+            if(Number.isInteger(tokenAccounts)){
+                tokenProps.tokenAccounts = tokenAccounts;
+                tokenProps.ratio = Math.floor(parseInt(pair.fdv)/tokenAccounts);
+            }
+                tokenProps.supply = holdersPercentages.tokenTotalSupply;
+                tokenProps.rayPct = holdersPercentages.rayPct;
+                tokenProps.top10Pct = holdersPercentages.top10Pct;
+                if(tokenProps.rayPct <= 25){
+                    let displayData = [
+                        tokenProps  
+                    ]
+                    await sendTelegramMsg(tokenProps);
+                    storeData(botPath,tokenProps);
+                    console.table(displayData);
+                }else {
+                    console.log('rejected token after pct',token);
+                    storeData(rejectedTokensPath,tokenProps);
+                    console.log(chalk.bgRed(JSON.stringify(tokenProps)));
+                }
             // console.log(chalk.blue(JSON.stringify(tokenProps)));
         }else {
+            console.log('rejected token less volume less txn',token);
+            storeData(rejectedTokensPath,tokenProps);
             console.log(chalk.bgRed(JSON.stringify(tokenProps)));
         }
         // return the token
         return tokenStoredData;
     }catch(err){
+        console.log('something wrong with dexscreener',token);
         console.log(err.message);
         console.log(token);
     }
-
-
-
 };
 
 // readData is the main function to read data and store it
