@@ -41,3 +41,18 @@ export function tokenTimeCheck(time){
     let tokenTime = Math.ceil(Date.parse(time)/1000);
     return (currentTime - tokenTime >= 600) ? true : false;
 }
+
+export function tokenScore(token){
+  let score = 0;
+
+  (token.priceChange > 0)? score++ : 0;
+  (token.priceChange5m > 0)? score++ : 0;
+  ((token.tokenAccounts -  token.txn24) <=50)? score++ : 0;
+  ((token.volume - token.fdv) <=10000)? score++ : 0;
+  (token.ratio > 50 )? score++ : 0;
+  (token.rayPct <= 20 )? score++ : 0;
+  (50 > token.top10Pct >= 35 )? score++ : 0;
+  (token.symbol.length <= 5 )? score++ : 0;
+
+  return score;
+}

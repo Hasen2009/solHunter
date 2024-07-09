@@ -1,6 +1,6 @@
 import { Connection, PublicKey, clusterApiUrl } from '@solana/web3.js';
 import axios from 'axios';
-
+import { tokenScore } from "./utils.js";
 // import {LIQUIDITY_STATE_LAYOUT_V4} from '@raydium-io/raydium-sdk';
 // import chalk from 'chalk';
 
@@ -8,56 +8,56 @@ import axios from 'axios';
 // const RPC_WEBSOCKET_ENDPOINT ='wss://api.mainnet-beta.solana.com';
 // // // raydium pool created account
 
-const solanaConnection = new Connection('https://mainnet.helius-rpc.com/?api-key=0d39621b-9712-47e4-92c8-24065ae41685');
+// const solanaConnection = new Connection('https://mainnet.helius-rpc.com/?api-key=0d39621b-9712-47e4-92c8-24065ae41685');
 
-async function checkRayHolding(tokenAddress){
-  let token = new PublicKey(tokenAddress);
-  let address = new PublicKey('5Q544fKrFoe6tsEbD7S8EmxGTJYAKtTVhAW5Q5pge4j1')
-  try{
+// async function checkRayHolding(tokenAddress){
+//   let token = new PublicKey(tokenAddress);
+//   let address = new PublicKey('5Q544fKrFoe6tsEbD7S8EmxGTJYAKtTVhAW5Q5pge4j1')
+//   try{
 
-    let rayHolding = await solanaConnection.getParsedTokenAccountsByOwner (address,
-      {
-        mint: token,
-      },
-      {
-        encoding: "jsonParsed",
-      }
-      );
-      let rayAmount = rayHolding.value[0].account.data.parsed.info.tokenAmount.uiAmount;
-      return ( rayAmount > 0 )  ? rayAmount : 0;
-  }catch(err){
-    console.log(err.message);
-  }
-}
+//     let rayHolding = await solanaConnection.getParsedTokenAccountsByOwner (address,
+//       {
+//         mint: token,
+//       },
+//       {
+//         encoding: "jsonParsed",
+//       }
+//       );
+//       let rayAmount = rayHolding.value[0].account.data.parsed.info.tokenAmount.uiAmount;
+//       return ( rayAmount > 0 )  ? rayAmount : 0;
+//   }catch(err){
+//     console.log(err.message);
+//   }
+// }
 
-async function topHolders(tokenAdress){
-  let token = new PublicKey(tokenAdress);
-  let address = new PublicKey('5Q544fKrFoe6tsEbD7S8EmxGTJYAKtTVhAW5Q5pge4j1')
-  try{
-    let top10Holders = (await solanaConnection.getTokenLargestAccounts (token ,'finalized')).value.slice(0,10);
-    let topHoldersAmount = 0;
-    top10Holders.forEach((account)=>{
-      topHoldersAmount += account.uiAmount;
-    })
-    return (topHoldersAmount > 0) ? topHoldersAmount : 0 ;
-  }catch(err){
-    console.log(err.message);
-  }
-}
+// async function topHolders(tokenAdress){
+//   let token = new PublicKey(tokenAdress);
+//   let address = new PublicKey('5Q544fKrFoe6tsEbD7S8EmxGTJYAKtTVhAW5Q5pge4j1')
+//   try{
+//     let top10Holders = (await solanaConnection.getTokenLargestAccounts (token ,'finalized')).value.slice(0,10);
+//     let topHoldersAmount = 0;
+//     top10Holders.forEach((account)=>{
+//       topHoldersAmount += account.uiAmount;
+//     })
+//     return (topHoldersAmount > 0) ? topHoldersAmount : 0 ;
+//   }catch(err){
+//     console.log(err.message);
+//   }
+// }
 
-async function tokenSupply(tokenAddress){
-  try{
-    let token = new PublicKey(tokenAddress);
+// async function tokenSupply(tokenAddress){
+//   try{
+//     let token = new PublicKey(tokenAddress);
 
-    const supply = await solanaConnection.getTokenSupply(
-      token,'confirmed', 
-    );
-    console.log(supply.value.uiAmount)
-  }catch(err){
-    console.table(err.message,tokenAddress);
-  }
-}
-tokenSupply('kFjbSyZMNRqjmVhL9T8XuZju3g8ocTegJxUUPVdpump');
+//     const supply = await solanaConnection.getTokenSupply(
+//       token,'confirmed', 
+//     );
+//     console.log(supply.value.uiAmount)
+//   }catch(err){
+//     console.table(err.message,tokenAddress);
+//   }
+// }
+// tokenSupply('kFjbSyZMNRqjmVhL9T8XuZju3g8ocTegJxUUPVdpump');
 // import { Helius } from "helius-sdk";
 
 // const helius = new Helius("0d39621b-9712-47e4-92c8-24065ae41685");
@@ -212,3 +212,28 @@ tokenSupply('kFjbSyZMNRqjmVhL9T8XuZju3g8ocTegJxUUPVdpump');
 // }
 
 // sendTelegramMsg()
+
+
+let token = {
+  "address": "fkCr7SKXtXxKFJ2ivfHE5s9j267xcdYx9E8gRdSpump",
+  "name": "charlie",
+  "symbol": "charlie",
+  "poolKey": "3no7LkXuBnQHR7CtjM88uS9gkr8G2efJhARQASrviw8K",
+  "platform": "pumpFun",
+  "url": "https://dexscreener.com/solana/3no7lkxubnqhr7ctjm88us9gkr8g2efjharqasrviw8k",
+  "txn24": 586,
+  "volume": 82407,
+  "volume5m": 26822,
+  "priceChange": 22,
+  "priceChange5m": -35,
+  "liquidity": 24754,
+  "fdv": 65840,
+  "mc": "65.84K",
+  "tokenAccounts": 609,
+  "ratio": 108,
+  "supply": 1000000000,
+  "rayPct": 17,
+  "top10Pct": 36
+}
+
+console.log(tokenScore(token))

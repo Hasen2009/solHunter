@@ -7,6 +7,7 @@ import { storeData,replaceData,tokenTimeCheck } from './utils.js';
 import { sendTelegramMsg } from './tgBot.js'
 import { findTotalHolders } from './findTotalHolders.js'
 import { holdersPercentage } from './holders.js';
+import { tokenScore } from "./utils.js";
 
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
 const __dirname = path.dirname(__filename); // get the name of the directory
@@ -52,10 +53,11 @@ async function checkToken(tokenStoredData,token){
                 ratio : 0,
                 supply : 0,
                 rayPct : 0,
-                top10Pct : 0
+                top10Pct : 0,
+                score : 0
             }
         // token detection algorithim 
-        if (tokenProps.fdv > 20000 && tokenProps.txn24 > 200){
+        if (tokenProps.fdv > 20000 && tokenProps.txn24 > 150){
             let tokenAccounts = await findTotalHolders(token);
             let holdersPercentages = await holdersPercentage(token);
             if(Number.isInteger(tokenAccounts)){
@@ -65,18 +67,26 @@ async function checkToken(tokenStoredData,token){
                 tokenProps.supply = holdersPercentages.tokenTotalSupply;
                 tokenProps.rayPct = holdersPercentages.rayPct;
                 tokenProps.top10Pct = holdersPercentages.top10Pct;
-                if(tokenProps.rayPct <= 25){
-                    let displayData = [
-                        tokenProps  
-                    ]
+                let score = tokenScore(tokenProps);
+                tokenProps.score = score;
+                if(tokenProps.platform == "pumpFun"){
+                    if(tokenProps.rayPct <= 25){
+                        let displayData = [
+                            tokenProps  
+                        ]
+                        await sendTelegramMsg(tokenProps);
+                        storeData(botPath,tokenProps);
+                        console.table(displayData);
+                    }else {
+                        console.log('rejected token after pct',token);
+                        storeData(rejectedTokensPath,tokenProps);
+                        console.log(chalk.bgRed(JSON.stringify(tokenProps)));
+                    }
+                }else{
                     await sendTelegramMsg(tokenProps);
                     storeData(botPath,tokenProps);
-                    console.table(displayData);
-                }else {
-                    console.log('rejected token after pct',token);
-                    storeData(rejectedTokensPath,tokenProps);
-                    console.log(chalk.bgRed(JSON.stringify(tokenProps)));
                 }
+
             // console.log(chalk.blue(JSON.stringify(tokenProps)));
         }else {
             console.log('rejected token less volume less txn',token);

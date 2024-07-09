@@ -1,12 +1,12 @@
 [
   {
-    "lpSignature": "2FdfDFjjXZrhdMKJTtYsa6HBgdJBcEUpPWGiLnuzs2XqYeHppHqvSbWKoqk7mhXRT1n5kQXQEDoXCdnHsXxuCu4t",
+    "lpSignature": "5RAtSqCK5WwU1NriZrYaJJgyDHMYWjH8HKubYMrDuUiX2BkGJ6TpiKubu3ostxsQh5dDb2USRp9XqfZYWrwDEdpB",
     "creator": "39azUYFWPz3VHgKCf3VChUwbpURdCHRxjWVowf5jUJjg",
-    "timestamp": "2024-07-06T19:20:16.245Z",
-    "pool_key": "BM7AKD73Uogebf7TXs6dgJoF73HMRWJBkwgQE7B9iuQZ",
+    "timestamp": "2024-07-06T19:38:28.525Z",
+    "pool_key": "CkkAVEVq7zzbKMdJEosHuLL5YzwbyJZEvH9nusQ7Jd79",
     "platform": "pumpFun",
     "baseInfo": {
-      "baseAddress": "Yte4rYTUa2axMLz71m9nSaukPmzBKuJkdJ7SNMjpump",
+      "baseAddress": "59CNykEYv7AGQss8NSmSzqxvp47EzWNXFFzGKcPmpump",
       "baseDecimals": 6,
       "baseLpAmount": 206900000
     }

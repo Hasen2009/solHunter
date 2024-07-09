@@ -4061,5 +4061,65 @@
       "baseDecimals": 9,
       "baseLpAmount": 1000000000
     }
+  },
+  {
+    "lpSignature": "2Nxuv5yZKQQTGVAAgv6CcNhY8C5bJvbFhnLX8FpeAavbVeY1VTv2S9PuLejYe2ZqAPHqhkSP5hW5DJeA6i2iXZ9R",
+    "creator": "D9xWBWTKiazYx6XZG8phe1bvjUnkKiguQY8baFuiUZ9U",
+    "timestamp": "2024-07-06T19:28:42.373Z",
+    "pool_key": "7wbUVotEyk4v64Pg6ukBm5EopzBJxYErXZE1eFxBD9JZ",
+    "platform": false,
+    "baseInfo": {
+      "baseAddress": "7RGspuXGfZzcN3JvmoZVyGvbUqeVxsECLMBwNkX16WxJ",
+      "baseDecimals": 6,
+      "baseLpAmount": 100000000
+    }
+  },
+  {
+    "lpSignature": "5MRDowjLFgtLjE3xcDnUUT8Px5stFKAMnHtw75QxBsp3meGs8MzGA1oECD5aaruNfHvKRFB6k9EDwp5RYK29LYMA",
+    "creator": "6bhg7uX5w673A9qDmhZdJgjZtPMbk7PcFhLv6ATdNoC7",
+    "timestamp": "2024-07-06T19:30:22.120Z",
+    "pool_key": "79p9Gzn5a38uk23V2RE7PFBUBceB4CaZJN9Ufqr4bSLH",
+    "platform": false,
+    "baseInfo": {
+      "baseAddress": "2FN8JXXhcFKaw5BhDrENubcXjZXcJzbBgWovhxfjzUoD",
+      "baseDecimals": 9,
+      "baseLpAmount": 7400000000
+    }
+  },
+  {
+    "lpSignature": "2KGWUNMprQH2Ve7sAAoBSmdtgicDbQySEgmFtbPYeXuusHs4XRDFNiJa7EeNJq1qe7JehckU79j42xj11nzD849F",
+    "creator": "43Dyh7amuAqjxa7zx4dRus13zYhZyf8b59RQTPbvWSmK",
+    "timestamp": "2024-07-06T19:31:58.570Z",
+    "pool_key": "9Nx5rScavtGsRjSwMPuiLPF5ynnZbVUxXLQR5bUamPPf",
+    "platform": false,
+    "baseInfo": {
+      "baseAddress": "5Jfei13SFvr9C1niKN4DoPdK3vWg8XqJym7sDR5tWgrt",
+      "baseDecimals": 6,
+      "baseLpAmount": 100000000
+    }
+  },
+  {
+    "lpSignature": "5FDKUdDsLnV7F6ikR68Hbn1ZKXcZ7nkVhvCTyBUYKev5JWhgwcEYfV1qyY4pL9sASBUcC7TbvnqqEKxkSsnoU3CJ",
+    "creator": "",
+    "timestamp": "2024-07-06T19:34:27.568Z",
+    "pool_key": "",
+    "platform": false,
+    "baseInfo": {
+      "baseAddress": "",
+      "baseDecimals": 0,
+      "baseLpAmount": 0
+    }
+  },
+  {
+    "lpSignature": "44MN8BJ7wwZaX2GhUSGbFTa1f2cPMNSf8Su1TBCnNbFSmTcfQbUHzeE6VBJkFPrqahkeayS7eyftkdz8eokhrYRp",
+    "creator": "AsBaqeYvn33yvtoqb55RXtWMhmamshPxCxm6RQX24K6S",
+    "timestamp": "2024-07-06T19:38:52.753Z",
+    "pool_key": "7YEs9dhR85LZRryXXtfNRamxgFojZddPEtg1Ma9L2ZXA",
+    "platform": false,
+    "baseInfo": {
+      "baseAddress": "DG5Qr3o9YovHLi4e5YhUNL44wdpmnJfupUnWnUdHKPio",
+      "baseDecimals": 9,
+      "baseLpAmount": 830000000
+    }
   }
 ]

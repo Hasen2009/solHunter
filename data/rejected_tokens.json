@@ -816,5 +816,26 @@
     "supply": 0,
     "rayPct": 0,
     "top10Pct": 0
+  },
+  {
+    "address": "Yte4rYTUa2axMLz71m9nSaukPmzBKuJkdJ7SNMjpump",
+    "name": "Dabi",
+    "symbol": "DABI",
+    "poolKey": "BM7AKD73Uogebf7TXs6dgJoF73HMRWJBkwgQE7B9iuQZ",
+    "platform": "pumpFun",
+    "url": "https://dexscreener.com/solana/bm7akd73uogebf7txs6dgjof73hmrwjbkwgqe7b9iuqz",
+    "txn24": 425,
+    "volume": 64308,
+    "volume5m": 20294,
+    "priceChange": -79,
+    "priceChange5m": -59,
+    "liquidity": 10423,
+    "fdv": 11449,
+    "mc": "11.449K",
+    "tokenAccounts": 0,
+    "ratio": 0,
+    "supply": 0,
+    "rayPct": 0,
+    "top10Pct": 0
   }
 ]
