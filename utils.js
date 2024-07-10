@@ -44,15 +44,13 @@ export function tokenTimeCheck(time){
 
 export function tokenScore(token){
   let score = 0;
+  let rayPctFromTop10Pct = Math.floor(token.rayPct/token.top10Pct * 100);
 
   (token.priceChange > 0)? score++ : 0;
-  (token.priceChange5m > 0)? score++ : 0;
-  ((token.tokenAccounts -  token.txn24) <=50)? score++ : 0;
-  ((token.volume - token.fdv) <=10000)? score++ : 0;
-  (token.ratio > 50 )? score++ : 0;
-  (token.rayPct <= 20 )? score++ : 0;
-  (50 > token.top10Pct >= 35 )? score++ : 0;
-  (token.symbol.length <= 5 )? score++ : 0;
+  (Math.abs(token.tokenAccounts -  token.txn24) <=90 && token.ratio > 90)? score++ : 0;
+  (token.volume > token.fdv)? score++ : 0;
+  ((50 >= token.top10Pct >= 30) && rayPctFromTop10Pct <= 50)? score++ : 0;
+  (token.symbol.length <= 6 )? score++ : 0;
 
   return score;
 }
