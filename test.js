@@ -1,6 +1,11 @@
 import { Connection, PublicKey, clusterApiUrl } from '@solana/web3.js';
 import axios from 'axios';
-import { tokenScore } from "./utils.js";
+import fs from "fs"
+import { fileURLToPath } from 'url';
+import { tokenScore } from './utils.js'
+import path from 'path';
+const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
+const __dirname = path.dirname(__filename); // get the name of the directory
 // import {LIQUIDITY_STATE_LAYOUT_V4} from '@raydium-io/raydium-sdk';
 // import chalk from 'chalk';
 
@@ -213,27 +218,32 @@ import { tokenScore } from "./utils.js";
 
 // sendTelegramMsg()
 
+const dataPath = path.join(__dirname, 'downloads/data', 'bot_results.json');
+const botPath = path.join(__dirname, 'downloads/data', 'filter_tokens.json');
+function storeData() {
+  fs.readFile(dataPath, (err, fileData) => {
+    if (err) {
+      console.error(`Error reading file: ${err}`);
+      return;
+    }
+    let newData = [];
+    try {
+      let json = JSON.parse(fileData.toString());
+      for  ( const token of json ){
+        let score = tokenScore(token);
+        token.score = score;
+        (score > 3) ? newData.push(token) : false;
+      }
+    } catch (parseError) {
+      console.error(`Error parsing JSON from file: ${parseError}`);
+      return;
+    }
 
-let token = {
-  "address": "fkCr7SKXtXxKFJ2ivfHE5s9j267xcdYx9E8gRdSpump",
-  "name": "charlie",
-  "symbol": "charlie",
-  "poolKey": "3no7LkXuBnQHR7CtjM88uS9gkr8G2efJhARQASrviw8K",
-  "platform": "pumpFun",
-  "url": "https://dexscreener.com/solana/3no7lkxubnqhr7ctjm88us9gkr8g2efjharqasrviw8k",
-  "txn24": 586,
-  "volume": 82407,
-  "volume5m": 26822,
-  "priceChange": 22,
-  "priceChange5m": -35,
-  "liquidity": 24754,
-  "fdv": 65840,
-  "mc": "65.84K",
-  "tokenAccounts": 609,
-  "ratio": 108,
-  "supply": 1000000000,
-  "rayPct": 17,
-  "top10Pct": 36
+    fs.writeFile(botPath, JSON.stringify(newData, null, 2), (writeErr) => {
+      if (writeErr) {
+        console.error(`Error writing file: ${writeErr}`);
+      }
+    });
+  });
 }
-
-console.log(tokenScore(token))
+storeData();
