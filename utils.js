@@ -49,7 +49,7 @@ export function tokenScore(token){
   (token.priceChange > 0)? score++ : 0;
   (Math.abs(token.tokenAccounts -  token.txn24) <=90 && token.ratio > 90)? score++ : 0;
   (token.volume > token.fdv)? score++ : 0;
-  ((50 >= token.top10Pct >= 30) && rayPctFromTop10Pct <= 50)? score++ : 0;
+  (token.top10Pct < 50 && token.top10Pct > 30 && rayPctFromTop10Pct <= 50)? score++ : 0;
   (token.symbol.length <= 6 )? score++ : 0;
 
   return score;
