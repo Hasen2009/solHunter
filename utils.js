@@ -62,9 +62,12 @@ export function tokenScore(token){
     let pct = Math.floor(((token.fdv - token.volume)/ token.volume) * 100);
     pct <=20 ? score++ : 0;
   }
-  
-  (token.top10Pct < 50 && token.top10Pct > 30 && rayPctFromTop10Pct <= 50)? score++ : 0;
-  (token.symbol.length <= 6 )? score++ : 0;
+  (token.volume >= 100000) ? score++ : 0 ;
+  (token.rayPct <= 15) ? score++ : 0 ;
+  (token.txn24 >=400 && token.tokenAccounts >=400) ? score++ : 0;
+  (token.top10Pct < 50 && token.top10Pct >= 35 && rayPctFromTop10Pct <= 50)? score++ : 0;
+  (token.symbol.length <= 6 && token.symbol.length > 3)? score++ : 0;
+  (token.symbol == token.name )? score++ : 0;
 
   return score;
 }
