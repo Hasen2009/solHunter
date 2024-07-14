@@ -65,6 +65,9 @@ async function monitorNewTokens(connection) {
                   baseLpAmount = baseInfo.uiTokenAmount.uiAmount;
                   pool_key = parsedTransaction?.transaction.message.accountKeys[2].pubkey.toString()
                 }
+              }else{
+                console.log("Error parsedTransaction");
+                console.log(parsedTransaction?.meta.err);
               }
             }catch(err){
               console.log(chalk.red("catch parsing ",signature));

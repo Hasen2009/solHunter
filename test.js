@@ -3,6 +3,7 @@ import axios from 'axios';
 import fs from "fs"
 import { fileURLToPath } from 'url';
 import { tokenScore } from './utils.js'
+import { holdersPercentage } from './holders.js'
 import path from 'path';
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
 const __dirname = path.dirname(__filename); // get the name of the directory
@@ -246,4 +247,8 @@ function storeData() {
     });
   });
 }
-storeData();
+// storeData();
+async function t (){
+  let t = await holdersPercentage("7y5RDq2FAg4FQyetb6RKGHad3fYhDcT6Jbhj4QR5pump");
+  console.log(t);
+}
