@@ -46,15 +46,16 @@ export function tokenScore(token){
   let score = 0;
   let rayPctFromTop10Pct = Math.floor(token.rayPct/token.top10Pct * 100);
 
-  (token.priceChange > 0)? score++ : 0;
+  // (token.priceChange > 0)? score++ : 0;
 
-  if(token.tokenAccounts >  token.txn24 && token.ratio > 90){
+  if(token.tokenAccounts >  token.txn24 && token.ratio > 90 && token.txn24 >=500 && token.tokenAccounts >=500){
     score++;
   }else {
+    if(token.txn24 >=500 && token.tokenAccounts >=500 && token.ratio > 90) {
     let pctAcc = Math.floor(((token.txn24 - token.tokenAccounts)/ token.tokenAccounts) * 100);
 
     (pctAcc <= 20 && token.ratio > 90)? score++ : 0;
-  }
+  }}
 
   if(token.volume > token.fdv){
     score++;
@@ -62,12 +63,12 @@ export function tokenScore(token){
     let pct = Math.floor(((token.fdv - token.volume)/ token.volume) * 100);
     pct <=20 ? score++ : 0;
   }
-  (token.volume >= 100000) ? score++ : 0 ;
-  (token.rayPct <= 15) ? score++ : 0 ;
-  (token.txn24 >=400 && token.tokenAccounts >=400) ? score++ : 0;
-  (token.top10Pct < 50 && token.top10Pct >= 35 && rayPctFromTop10Pct <= 50)? score++ : 0;
-  (token.symbol.length <= 6 && token.symbol.length > 3)? score++ : 0;
-  (token.symbol == token.name )? score++ : 0;
+  // (token.volume >= 100000) ? score++ : 0 ;
+  // (token.rayPct <= 20 && token.rayPct >= 10) ? score++ : 0 ;
+  // (token.txn24 >=500 && token.tokenAccounts >=500) ? score++ : 0;
+  (token.top10Pct < 50 && token.top10Pct >= 29 && rayPctFromTop10Pct <= 50 && token.rayPct <= 20 && token.rayPct >= 10)? score++ : 0;
+  (token.symbol.length <= 6 && token.symbol.length > 2 && token.symbol == token.name)? score++ : 0;
+  // (token.symbol == token.name )? score++ : 0;
 
   return score;
 }
