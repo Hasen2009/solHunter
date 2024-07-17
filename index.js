@@ -117,5 +117,5 @@ monitorNewTokens(solanaConnection);
 // setInterval every 2.5 minutes checking dexscreener api
 setInterval(()=>{
     readData();
-},150000);
+},120000);
 
