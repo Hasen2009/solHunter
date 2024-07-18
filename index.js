@@ -67,7 +67,7 @@ async function monitorNewTokens(connection) {
                 }
               }else{
                 console.log("Error parsedTransaction");
-                console.log(parsedTransaction?.meta.err);
+                console.log(JSON.stringify(parsedTransaction));
               }
             }catch(err){
               console.log(chalk.red("catch parsing ",signature));
