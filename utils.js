@@ -59,7 +59,7 @@ export function replaceData(dataFilePath,leftData) {
 export function tokenTimeCheck(time){
     let currentTime = Math.ceil(Date.parse(new Date().toISOString())/1000);
     let tokenTime = Math.ceil(Date.parse(time)/1000);
-    return (currentTime - tokenTime <= 3600) ? true : false;
+    return (currentTime - tokenTime >= 120 && currentTime - tokenTime <= 3600) ? true : false;
 }
  
 export function tokenScore(token){
@@ -83,7 +83,7 @@ export function tokenScore(token){
     let pct = Math.floor(((token.fdv - token.volume)/ token.volume) * 100);
     pct <=30 ? score++ : 0;
   }
-  (token.volume >= 20000) ? score++ : 0;
+  (token.volume >= 10000) ? score++ : 0;
   // (token.rayPct <= 20 && token.rayPct >= 10) ? score++ : 0 ;
   // (token.txn24 >=500 && token.tokenAccounts >=500) ? score++ : 0;
   (token.top10Pct < 50 && token.top10Pct >= 29 && rayPctFromTop10Pct <= 50 && token.rayPct <= 20 && token.rayPct >= 10)? score++ : 0;
