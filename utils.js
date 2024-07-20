@@ -77,12 +77,13 @@ export function tokenScore(token){
     (pctAcc <= 20 && token.ratio > 90)? score++ : 0;
   }}
 
-  if(token.volume > token.fdv && token.volume >= 100000){
+  if(token.volume > token.fdv ){
     score++;
   }else {
     let pct = Math.floor(((token.fdv - token.volume)/ token.volume) * 100);
-    pct <=20 ? score++ : 0;
+    pct <=30 ? score++ : 0;
   }
+  (token.volume >= 20000) ? score++ : 0;
   // (token.rayPct <= 20 && token.rayPct >= 10) ? score++ : 0 ;
   // (token.txn24 >=500 && token.tokenAccounts >=500) ? score++ : 0;
   (token.top10Pct < 50 && token.top10Pct >= 29 && rayPctFromTop10Pct <= 50 && token.rayPct <= 20 && token.rayPct >= 10)? score++ : 0;
@@ -93,7 +94,7 @@ export function tokenScore(token){
 
 export function tokenPreCheck(token){
   let rayPctFromTop10Pct = Math.floor(token.rayPct/token.top10Pct * 100);
-  if(token.top10Pct <= 70){
+  if(token.rayPct <= 60){
     console.log("tokenPreCheck", token.address);
     deleteData(token.address);
     return false;
