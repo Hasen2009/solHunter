@@ -94,7 +94,7 @@ export function tokenScore(token){
 
 export function tokenPreCheck(token){
   let rayPctFromTop10Pct = Math.floor(token.rayPct/token.top10Pct * 100);
-  if(token.rayPct <= 60){
+  if(token.rayPct >= 60){
     console.log("tokenPreCheck", token.address);
     deleteData(token.address);
     return false;
