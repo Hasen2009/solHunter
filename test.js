@@ -249,6 +249,7 @@ function storeData() {
 }
 // storeData();
 async function t (){
-  let t = await holdersPercentage("7y5RDq2FAg4FQyetb6RKGHad3fYhDcT6Jbhj4QR5pump");
+  let t = await holdersPercentage("9AVoZhF38sKetvLovNxpBMx8mh9U2t6ZRFV2i9mqpump");
   console.log(t);
 }
+t ()

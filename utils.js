@@ -1,47 +1,65 @@
 import fs from 'fs';
-
+import chalk from 'chalk';
 // storing data by reading the file and rewrite 
 export function storeData(dataPath, newData) {
-  fs.readFile(dataPath, (err, fileData) => {
-    if (err) {
-      console.error(`Error reading file: ${err}`);
-      return;
-    }
+  try {
     let json;
-    try {
-      json = JSON.parse(fileData.toString());
-    } catch (parseError) {
-      console.error(`Error parsing JSON from file: ${parseError}`);
-      return;
-    }
+    let data = fs.readFileSync(dataPath);
+    json = JSON.parse(data.toString());
     json.push(newData);
+    fs.writeFileSync(dataPath,JSON.stringify(json, null, 2))
 
-    fs.writeFile(dataPath, JSON.stringify(json, null, 2), (writeErr) => {
-      if (writeErr) {
-        console.error(`Error writing file: ${writeErr}`);
-      }
-    });
-  });
+  } catch (parseError) {
+    console.error(`Error parsing JSON from file: ${parseError}`);
+    return;
+  }
+  // fs.readFileSync(dataPath, (err, fileData) => {
+  //   if (err) {
+  //     console.error(`Error reading file: ${err}`);
+  //     return;
+  //   }
+  //   let json;
+  //   try {
+  //     json = JSON.parse(fileData.toString());
+  //   } catch (parseError) {
+  //     console.error(`Error parsing JSON from file: ${parseError}`);
+  //     return;
+  //   }
+  //   json.push(newData);
+
+  //   fs.writeFileSync(dataPath, JSON.stringify(json, null, 2), (writeErr) => {
+  //     if (writeErr) {
+  //       console.error(`Error writing file: ${writeErr}`);
+  //     }
+  //   });
+  // });
 }
 
 // replace data in token creation file with unchecked ones only
 export function replaceData(dataPath, leftData) {
-    fs.writeFile(dataPath, JSON.stringify(leftData, null, 2), (writeErr) => {
-      if (writeErr) {
-        console.error(`Error writing file: ${writeErr}`);
-      }
-    });
+  try{
+    fs.writeFileSync(dataPath,JSON.stringify(leftData, null, 2))
+
+  }catch (parseError) {
+    console.error(`Error parsing JSON from file: ${parseError}`);
+    return;
+  }
+    // fs.writeFileSync(dataPath, JSON.stringify(leftData, null, 2), (writeErr) => {
+    //   if (writeErr) {
+    //     console.error(`Error writing file: ${writeErr}`);
+    //   }
+    // });
 }
 
 
-// check if token age 10 minutes old or not
+// check if token age 1 Hours old or not
 
 export function tokenTimeCheck(time){
     let currentTime = Math.ceil(Date.parse(new Date().toISOString())/1000);
     let tokenTime = Math.ceil(Date.parse(time)/1000);
-    return (currentTime - tokenTime >= 480) ? true : false;
+    return (currentTime - tokenTime <= 3600) ? true : false;
 }
-
+ 
 export function tokenScore(token){
   let score = 0;
   let rayPctFromTop10Pct = Math.floor(token.rayPct/token.top10Pct * 100);
@@ -57,18 +75,45 @@ export function tokenScore(token){
     (pctAcc <= 20 && token.ratio > 90)? score++ : 0;
   }}
 
-  if(token.volume > token.fdv){
+  if(token.volume > token.fdv && token.volume >= 100000){
     score++;
   }else {
     let pct = Math.floor(((token.fdv - token.volume)/ token.volume) * 100);
     pct <=20 ? score++ : 0;
   }
-  // (token.volume >= 100000) ? score++ : 0 ;
   // (token.rayPct <= 20 && token.rayPct >= 10) ? score++ : 0 ;
   // (token.txn24 >=500 && token.tokenAccounts >=500) ? score++ : 0;
   (token.top10Pct < 50 && token.top10Pct >= 29 && rayPctFromTop10Pct <= 50 && token.rayPct <= 20 && token.rayPct >= 10)? score++ : 0;
   (token.symbol.length <= 6 && token.symbol.length > 2 && token.symbol == token.name)? score++ : 0;
   // (token.symbol == token.name )? score++ : 0;
-
   return score;
+}
+
+export function tokenPreCheck(token){
+  let rayPctFromTop10Pct = Math.floor(token.rayPct/token.top10Pct * 100);
+  if(rayPctFromTop10Pct >= 40){
+    deleteData(dataPath,token.address);
+    return false;
+  }
+  return (token.tokenAccounts >=500 && token.top10Pct < 50 && token.top10Pct >= 29 && rayPctFromTop10Pct <= 45 && token.rayPct <= 20 && token.rayPct >= 10) ? true : false
+}
+
+export function deleteData(dataPath, tokenAddress){
+  console.log('deleting broo')
+  console.log(chalk.bgRed(tokenAddress))
+    try {
+      let json;
+      let data = fs.readFileSync(dataPath);
+      json = JSON.parse(data.toString());
+      // let index = json.findIndex(i => i.lpSignature === deletedToken.lpSignature);;
+      let newJson = json.filter((el)=>el.baseInfo.baseAddress != tokenAddress);
+
+      // console.log('length',json.length);
+      // console.log('newJson',newJson.length);
+      // console.log('index',index);
+      fs.writeFileSync(dataPath,JSON.stringify(newJson, null, 2))
+    } catch (parseError) {
+      console.error(`Error parsing JSON from file: ${parseError}`);
+      return;
+    }
 }
