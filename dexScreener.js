@@ -1,19 +1,11 @@
 import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
 import chalk from 'chalk';
 import axios from 'axios';
 import { storeData,replaceData,tokenTimeCheck ,tokenScore, tokenPreCheck,deleteData} from './utils.js';
 import { sendTelegramMsg } from './tgBot.js'
 import { findTotalHolders } from './findTotalHolders.js'
 import { holdersPercentage } from './holders.js';
-
-const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
-const __dirname = path.dirname(__filename); // get the name of the directory
-const dataPath = path.join(__dirname, 'data', 'new_solana_tokens.json');
-const botPath = path.join(__dirname, 'data', 'bot_results.json');
-const rejectedTokensPath = path.join(__dirname, 'data', 'rejected_tokens.json');
-
+import { dataPath,rejectedTokensPath } from './constants.js';
 const http = axios.create({
     baseURL : 'https://api.dexscreener.com/latest/dex'
 })
@@ -30,7 +22,8 @@ async function checkToken(tokenStoredData,token,holdersPercentages){
                 tokenAccounts : tokenAccounts,
                 rayPct : holdersPercentages.rayPct,
                 top10Pct : holdersPercentages.top10Pct,
-                supply : holdersPercentages.tokenTotalSupply
+                supply : holdersPercentages.tokenTotalSupply,
+                address : tokenStoredData.baseInfo.baseAddress
             }    
             let isTokenReady = tokenPreCheck(tempToken);
             if(isTokenReady){
@@ -95,12 +88,13 @@ async function dexScreenerAPICall(tokenStoredData,token,tempTokenData){
                 await sendTelegramMsg(tokenProps);
                 
                 storeData(botPath,tokenProps);
-                deleteData(dataPath,tokenStoredData.baseInfo.baseAddress);
+                console.log(chalk.bgRed("Token score above 2 and ready to send", tokenProps.address));
+                deleteData(tokenStoredData.baseInfo.baseAddress);
             }
             // console.log(chalk.blue(JSON.stringify(tokenProps)));
         }else if(tokenProps.fdv < 20000){
-            console.log("Token fdv less 20K", token)
-            deleteData(dataPath,tokenStoredData.baseInfo.baseAddress);
+            console.log(chalk.bgRed("Token fdv less 20K", token));
+            deleteData(tokenStoredData.baseInfo.baseAddress);
             storeData(rejectedTokensPath,tokenProps);
         }
         // else {
@@ -153,7 +147,8 @@ export async function readData()  {
                         // newTokenJson.push(token);
                     }
                 }else{
-                    deleteData(dataPath,token.baseInfo.baseAddress)
+                    console.log("tokenBolean deleting", token.baseInfo.baseAddress);
+                    deleteData(token.baseInfo.baseAddress)
                 }
             }
             // replace the token creation file with only unchecked ones

@@ -1,13 +1,15 @@
 import fs from 'fs';
 import chalk from 'chalk';
+import { dataPath } from './constants.js';
+
 // storing data by reading the file and rewrite 
-export function storeData(dataPath, newData) {
+export function storeData(dataFilePath, newData) {
   try {
     let json;
-    let data = fs.readFileSync(dataPath);
+    let data = fs.readFileSync(dataFilePath);
     json = JSON.parse(data.toString());
     json.push(newData);
-    fs.writeFileSync(dataPath,JSON.stringify(json, null, 2))
+    fs.writeFileSync(dataFilePath,JSON.stringify(json, null, 2))
 
   } catch (parseError) {
     console.error(`Error parsing JSON from file: ${parseError}`);
@@ -36,9 +38,9 @@ export function storeData(dataPath, newData) {
 }
 
 // replace data in token creation file with unchecked ones only
-export function replaceData(dataPath, leftData) {
+export function replaceData(dataFilePath,leftData) {
   try{
-    fs.writeFileSync(dataPath,JSON.stringify(leftData, null, 2))
+    fs.writeFileSync(dataFilePath,JSON.stringify(leftData, null, 2))
 
   }catch (parseError) {
     console.error(`Error parsing JSON from file: ${parseError}`);
@@ -91,14 +93,15 @@ export function tokenScore(token){
 
 export function tokenPreCheck(token){
   let rayPctFromTop10Pct = Math.floor(token.rayPct/token.top10Pct * 100);
-  if(rayPctFromTop10Pct >= 40){
-    deleteData(dataPath,token.address);
+  if(token.top10Pct <= 70){
+    console.log("tokenPreCheck", token.address);
+    deleteData(token.address);
     return false;
   }
   return (token.tokenAccounts >=500 && token.top10Pct < 50 && token.top10Pct >= 29 && rayPctFromTop10Pct <= 45 && token.rayPct <= 20 && token.rayPct >= 10) ? true : false
 }
 
-export function deleteData(dataPath, tokenAddress){
+export function deleteData(tokenAddress){
   console.log('deleting broo')
   console.log(chalk.bgRed(tokenAddress))
     try {

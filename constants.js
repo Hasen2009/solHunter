@@ -1,6 +1,14 @@
 import { Connection, PublicKey, clusterApiUrl } from '@solana/web3.js';
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
 dotenv.config();
+const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
+const __dirname = path.dirname(__filename); // get the name of the directory
+
+export const dataPath = path.join(__dirname, 'data', 'new_solana_tokens.json');
+export const nonPumpPath = path.join(__dirname, 'data', 'new_non_pump.json');
+export const rejectedTokensPath = path.join(__dirname, 'data', 'rejected_tokens.json');
 
 const RPC_ENDPOINT = process.env.RPC_ENDPOINT ?? clusterApiUrl('mainnet-beta');
 const RPC_WEBSOCKET_ENDPOINT =

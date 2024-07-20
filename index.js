@@ -2,15 +2,10 @@
 import chalk from 'chalk';
 import { storeData } from './utils.js';
 import { readData } from './dexScreener.js';
-import path from 'path';
-import { fileURLToPath } from 'url';
 import { rayFee, solanaConnection,getTokenPlatform } from './constants.js';
 import { parsingTxn } from './parsingTxn.js'
-const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
-const __dirname = path.dirname(__filename); // get the name of the directory
+import { dataPath,nonPumpPath } from './constants.js';
 
-const dataPath = path.join(__dirname, 'data', 'new_solana_tokens.json');
-const nonPumpPath = path.join(__dirname, 'data', 'new_non_pump.json');
 
 async function monitorNewTokens(connection) {
   console.log(chalk.green(`monitoring new solana tokens...`));
