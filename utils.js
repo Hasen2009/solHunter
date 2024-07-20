@@ -15,42 +15,39 @@ export function storeData(dataFilePath, newData) {
     console.error(`Error parsing JSON from file: ${parseError}`);
     return;
   }
-  // fs.readFileSync(dataPath, (err, fileData) => {
-  //   if (err) {
-  //     console.error(`Error reading file: ${err}`);
-  //     return;
-  //   }
-  //   let json;
-  //   try {
-  //     json = JSON.parse(fileData.toString());
-  //   } catch (parseError) {
-  //     console.error(`Error parsing JSON from file: ${parseError}`);
-  //     return;
-  //   }
-  //   json.push(newData);
 
-  //   fs.writeFileSync(dataPath, JSON.stringify(json, null, 2), (writeErr) => {
-  //     if (writeErr) {
-  //       console.error(`Error writing file: ${writeErr}`);
-  //     }
-  //   });
-  // });
+}
+
+export function storeResultsData(dataFilePath, newData) {
+  fs.readFileSync(dataFilePath, (err, fileData) => {
+    if (err) {
+      console.error(`Error reading file: ${err}`);
+      return;
+    }
+    let json;
+    try {
+      json = JSON.parse(fileData.toString());
+    } catch (parseError) {
+      console.error(`Error parsing JSON from file: ${parseError}`);
+      return;
+    }
+    json.push(newData);
+
+    fs.writeFile(dataFilePath, JSON.stringify(json, null, 2), (writeErr) => {
+      if (writeErr) {
+        console.error(`Error writing file: ${writeErr}`);
+      }
+    });
+  });
 }
 
 // replace data in token creation file with unchecked ones only
 export function replaceData(dataFilePath,leftData) {
-  try{
-    fs.writeFileSync(dataFilePath,JSON.stringify(leftData, null, 2))
-
-  }catch (parseError) {
-    console.error(`Error parsing JSON from file: ${parseError}`);
-    return;
-  }
-    // fs.writeFileSync(dataPath, JSON.stringify(leftData, null, 2), (writeErr) => {
-    //   if (writeErr) {
-    //     console.error(`Error writing file: ${writeErr}`);
-    //   }
-    // });
+    fs.writeFileSync(dataFilePath, JSON.stringify(leftData, null, 2), (writeErr) => {
+      if (writeErr) {
+        console.error(`Error writing file: ${writeErr}`);
+      }
+    });
 }
 
 
@@ -60,6 +57,12 @@ export function tokenTimeCheck(time){
     let currentTime = Math.ceil(Date.parse(new Date().toISOString())/1000);
     let tokenTime = Math.ceil(Date.parse(time)/1000);
     return (currentTime - tokenTime >= 120 && currentTime - tokenTime <= 3600) ? true : false;
+}
+
+export function tokenDeleteTimeCheck(time){
+  let currentTime = Math.ceil(Date.parse(new Date().toISOString())/1000);
+  let tokenTime = Math.ceil(Date.parse(time)/1000);
+  return (currentTime - tokenTime <= 3600) ? true : false;
 }
  
 export function tokenScore(token){
@@ -71,7 +74,7 @@ export function tokenScore(token){
   if(token.tokenAccounts >  token.txn24 && token.ratio > 90 && token.txn24 >=500 && token.tokenAccounts >=500){
     score++;
   }else {
-    if(token.txn24 >=500 && token.tokenAccounts >=500 && token.ratio > 90) {
+    if(token.txn24 >=300 && token.tokenAccounts >=300 && token.ratio > 90) {
     let pctAcc = Math.floor(((token.txn24 - token.tokenAccounts)/ token.tokenAccounts) * 100);
 
     (pctAcc <= 20 && token.ratio > 90)? score++ : 0;
@@ -99,7 +102,7 @@ export function tokenPreCheck(token){
     deleteData(token.address);
     return false;
   }
-  return (token.tokenAccounts >=500 && token.top10Pct < 50 && token.top10Pct >= 29 && rayPctFromTop10Pct <= 45 && token.rayPct <= 20 && token.rayPct >= 10) ? true : false
+  return (token.tokenAccounts >=300 && token.top10Pct < 50 && token.top10Pct >= 29 && rayPctFromTop10Pct <= 45 && token.rayPct <= 25 && token.rayPct >= 10) ? true : false
 }
 
 export function deleteData(tokenAddress){

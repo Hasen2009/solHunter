@@ -1,11 +1,12 @@
 import fs from 'fs';
 import chalk from 'chalk';
 import axios from 'axios';
-import { storeData,replaceData,tokenTimeCheck ,tokenScore, tokenPreCheck,deleteData} from './utils.js';
+import { storeData,replaceData,tokenTimeCheck ,tokenScore, tokenPreCheck,deleteData,tokenDeleteTimeCheck,storeResultsData} from './utils.js';
 import { sendTelegramMsg } from './tgBot.js'
 import { findTotalHolders } from './findTotalHolders.js'
 import { holdersPercentage } from './holders.js';
-import { dataPath,rejectedTokensPath } from './constants.js';
+import { dataPath,rejectedTokensPath,botPath } from './constants.js';
+import { stringify } from 'querystring';
 const http = axios.create({
     baseURL : 'https://api.dexscreener.com/latest/dex'
 })
@@ -26,6 +27,8 @@ async function checkToken(tokenStoredData,token,holdersPercentages){
                 address : tokenStoredData.baseInfo.baseAddress
             }    
             let isTokenReady = tokenPreCheck(tempToken);
+            console.log('isTokenReady',isTokenReady);
+            console.log(JSON,stringify(tempToken));
             if(isTokenReady){
                 console.log("isTokenReady", token)
                 dexScreenerAPICall(tokenStoredData,token,tempToken)
@@ -68,6 +71,12 @@ async function dexScreenerAPICall(tokenStoredData,token,tempTokenData){
                 top10Pct : 0,
                 score : 0
             }
+            let displayData1 = [
+                tokenProps  
+            ]
+            console.log(chalk.bgGreen("Token dex call before check mc and score"));
+            console.table(chalk.bgRed(displayData1));
+
         // token detection algorithim 
         if (tokenProps.fdv <= 125000 && tokenProps.fdv >= 20000){
             console.log("Token Mc between 125K and 20K", token)
@@ -83,19 +92,18 @@ async function dexScreenerAPICall(tokenStoredData,token,tempTokenData){
                 tokenProps  
             ]
             console.table(displayData);
-            if(score >=2){
-
+            if(score >=3){
                 await sendTelegramMsg(tokenProps);
-                
-                storeData(botPath,tokenProps);
-                console.log(chalk.bgRed("Token score above 2 and ready to send", tokenProps.address));
+                storeResultsData(botPath,tokenProps);
+                console.log(chalk.bgRed("Token score above 2 and ready to send", token));
                 deleteData(tokenStoredData.baseInfo.baseAddress);
             }
             // console.log(chalk.blue(JSON.stringify(tokenProps)));
         }else if(tokenProps.fdv < 20000){
             console.log(chalk.bgRed("Token fdv less 20K", token));
+            console.log(chalk.bgRed( JSON.stringify(tokenProps)));
             deleteData(tokenStoredData.baseInfo.baseAddress);
-            storeData(rejectedTokensPath,tokenProps);
+            storeResultsData(rejectedTokensPath,tokenProps);
         }
         // else {
         //     console.log('rejected token volume > 100K',token);
@@ -138,6 +146,7 @@ export async function readData()  {
         (async function(){
             for await ( const token of json ){
                 let tokenBolean = tokenTimeCheck(token.timestamp);
+                let tokenDeleteTimeCheckBoolean = tokenDeleteTimeCheck(token.timestamp);
                 // if token age is smaller than 1 hour will be stored in new array in data file
                 if(tokenBolean){
                     let holdersPercentages = await holdersPercentage(token.baseInfo.baseAddress);
@@ -146,9 +155,9 @@ export async function readData()  {
                         await checkToken(token,token.baseInfo.baseAddress,holdersPercentages);
                         // newTokenJson.push(token);
                     }
-                }else{
+                }else if (!tokenDeleteTimeCheckBoolean){
                     console.log("tokenBolean deleting", token.baseInfo.baseAddress);
-                    deleteData(token.baseInfo.baseAddress)
+                    deleteData(token.baseInfo.baseAddress);
                 }
             }
             // replace the token creation file with only unchecked ones
