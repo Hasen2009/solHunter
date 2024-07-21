@@ -79,7 +79,7 @@ async function dexScreenerAPICall(tokenStoredData,token,tempTokenData){
             console.table(chalk.bgRed(displayData1));
 
         // token detection algorithim 
-        if (tokenProps.fdv <= 125000 && tokenProps.fdv >= 20000){
+        if (tokenProps.fdv <= 100000 && tokenProps.fdv >= 20000 && tokenProps.volume >= 10000){
             console.log("Token Mc between 125K and 20K", token)
             tokenProps.supply = tempTokenData.supply;
             tokenProps.rayPct = tempTokenData.rayPct;
