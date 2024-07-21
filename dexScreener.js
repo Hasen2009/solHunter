@@ -5,8 +5,9 @@ import { storeData,replaceData,tokenTimeCheck ,tokenScore, tokenPreCheck,deleteD
 import { sendTelegramMsg } from './tgBot.js'
 import { findTotalHolders } from './findTotalHolders.js'
 import { holdersPercentage } from './holders.js';
-import { dataPath,rejectedTokensPath,botPath } from './constants.js';
+import { dataPath,rejectedTokensPath,botPath,failedTxnPath } from './constants.js';
 import { stringify } from 'querystring';
+import { parsingTxn } from './parsingTxn.js'
 const http = axios.create({
     baseURL : 'https://api.dexscreener.com/latest/dex'
 })
@@ -159,6 +160,38 @@ export async function readData()  {
                     console.log("tokenBolean deleting", token.baseInfo.baseAddress);
                     deleteData(token.baseInfo.baseAddress);
                 }
+            }
+            // replace the token creation file with only unchecked ones
+            // replaceData(dataPath,newTokenJson);
+        })();
+      }
+    } catch (parseError) {
+      console.error(`Error parsing JSON from file: ${parseError}`);
+      return;
+    }
+  });
+}
+
+// readFailedTxn for reading failed transactions
+export async function readFailedTxn()  {
+    console.log(chalk.bgGreen("Start Reading failed txn"))
+    // console.log(chalk.yellow("Start Reading Data"));
+    // read created token file to check it
+    fs.readFile (failedTxnPath, (err, fileData) =>{
+    if (err) {
+      console.error(`Error reading file: ${err}`);
+      return;
+    }
+    let json = [];
+    try {
+      json = JSON.parse(fileData.toString());
+
+      // check length of data array
+      if(json.length > 0){
+      // annonymous function to use await for parsingTxn function
+        (async function(){
+            for await ( const signature of json ){
+                await parsingTxn(signature);
             }
             // replace the token creation file with only unchecked ones
             // replaceData(dataPath,newTokenJson);

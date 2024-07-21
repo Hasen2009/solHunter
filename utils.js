@@ -1,6 +1,6 @@
 import fs from 'fs';
 import chalk from 'chalk';
-import { dataPath } from './constants.js';
+import { dataPath,failedTxnPath } from './constants.js';
 
 // storing data by reading the file and rewrite 
 export function storeData(dataFilePath, newData) {
@@ -15,11 +15,10 @@ export function storeData(dataFilePath, newData) {
     console.error(`Error parsing JSON from file: ${parseError}`);
     return;
   }
-
 }
 
 export function storeResultsData(dataFilePath, newData) {
-  fs.readFileSync(dataFilePath, (err, fileData) => {
+  fs.readFile(dataFilePath, (err, fileData) => {
     if (err) {
       console.error(`Error reading file: ${err}`);
       return;
@@ -123,4 +122,30 @@ export function deleteData(tokenAddress){
       console.error(`Error parsing JSON from file: ${parseError}`);
       return;
     }
+}
+
+export function deleteFailedTxn(signature){
+  console.log('deleting Failed Txn broo');
+  console.log(chalk.bgRed(signature));
+  fs.readFile(failedTxnPath, (err, fileData) => {
+    if (err) {
+      console.error(`Error reading file: ${err}`);
+      return;
+    }
+    let json;
+    try {
+      json = JSON.parse(fileData.toString());
+    } catch (parseError) {
+      console.error(`Error parsing JSON from file: ${parseError}`);
+      return;
+    }
+    let newJson = json.filter((el)=>el != signature);
+
+    fs.writeFile(failedTxnPath, JSON.stringify(newJson, null, 2), (writeErr) => {
+      if (writeErr) {
+        console.error(`Error writing file: ${writeErr}`);
+      }
+    });
+  });
+
 }

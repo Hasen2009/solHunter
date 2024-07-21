@@ -10,6 +10,7 @@ export const dataPath = path.join(__dirname, 'data', 'new_solana_tokens.json');
 export const botPath = path.join(__dirname, 'data', 'bot_results.json');
 export const nonPumpPath = path.join(__dirname, 'data', 'new_non_pump.json');
 export const rejectedTokensPath = path.join(__dirname, 'data', 'rejected_tokens.json');
+export const failedTxnPath = path.join(__dirname, 'data', 'failed_txn.json');
 
 const RPC_ENDPOINT = process.env.RPC_ENDPOINT ?? clusterApiUrl('mainnet-beta');
 const RPC_WEBSOCKET_ENDPOINT =

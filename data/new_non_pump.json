@@ -9629,5 +9629,173 @@
       "baseDecimals": 6,
       "baseLpAmount": 1000000000
     }
+  },
+  {
+    "lpSignature": "4CHo6G42StZr2Se3dsVzKvVncU9fAofsiSnt8WWYrfz2hUb5n1D9AaEQHtM9Fm4biv2nGk9C3x52ZXGxHyUUAkux",
+    "creator": "AfZdZhHgwynSbj5RgL28JvWRsTPSXGeEGKkBnP9twZ6v",
+    "timestamp": "2024-07-21T00:52:38.597Z",
+    "pool_key": "Ce9ejWUQzh9kutKWqyCs1TQh8VXD8wwvdXQSm5s5EQR9",
+    "platform": false,
+    "baseInfo": {
+      "baseAddress": "3RWJWX8Sq9G3vdrYeWwCxa5Yg3cvC2k3VjtXPdmnWExS",
+      "baseDecimals": 9,
+      "baseLpAmount": 1900000000
+    }
+  },
+  {
+    "lpSignature": "4usH9Lmm3gAPTvWjoemk2zKNCz1djNcQtgNFyY3jhu4mD4f4NH8V4deVwtje6GDkA1Jz9XcGUysrST1ky88wJBRC",
+    "creator": "",
+    "timestamp": "2024-07-21T00:54:22.594Z",
+    "pool_key": "",
+    "platform": false,
+    "baseInfo": {
+      "baseAddress": "",
+      "baseDecimals": 0,
+      "baseLpAmount": 0
+    }
+  },
+  {
+    "lpSignature": "4ozyPgz4oEAjTAeA1WDhCM8UdjFkEJis5L4iXaFCFE42oojma5P1Zh5B59FAnBPP7cZsDeaYpbPzNQWunpBEYXRq",
+    "creator": "",
+    "timestamp": "2024-07-21T00:54:35.298Z",
+    "pool_key": "",
+    "platform": false,
+    "baseInfo": {
+      "baseAddress": "",
+      "baseDecimals": 0,
+      "baseLpAmount": 0
+    }
+  },
+  {
+    "lpSignature": "467ja3bP1xNNnuY5pmid5xSZpmtUycyrpVQJRoz77bVX54TpRxukUnupjiqbZwvpc992KGB5Hq2CMicUaUcbjCHE",
+    "creator": "4danBQNSDGTgEii5ZcFSxWLhvR49jEdUxv24GjAPGm6N",
+    "timestamp": "2024-07-21T13:55:18.972Z",
+    "pool_key": "BLYgTP7Nka4BTRnDiFZ3j2peGLxeezu6k1hs914raevN",
+    "platform": false,
+    "baseInfo": {
+      "baseAddress": "7mHma3LZ5yanC2TyWuGpTxtGUUmSAM1T96m7jECb8ve4",
+      "baseDecimals": 8,
+      "baseLpAmount": 1000000000
+    }
+  },
+  {
+    "lpSignature": "23bSGFx6JRaG7zYXMribsZdDEr1r43S7UchAzZGJho7BUAUtBoZNcVKB2EGsrjR88jhMh4UCsGxAcsDw3uqtcTjz",
+    "creator": "Dm4MCCUCjqsD2aXphEF74zi6Q6HVauURXeSALXE1fHBR",
+    "timestamp": "2024-07-21T13:56:47.337Z",
+    "pool_key": "3tVHWGC5hb382U7S34mBdG1T3nQB7z2dHpJtVPJ9UsGL",
+    "platform": false,
+    "baseInfo": {
+      "baseAddress": "7e5qiCepuRYrWhWaChzYxxJCeomhxZfkqXnkqt8EeNr4",
+      "baseDecimals": 6,
+      "baseLpAmount": 1000000000
+    }
+  },
+  {
+    "lpSignature": "4bicFLzDeEZjtNjNNSarwsWwHQ36nuVVCc7hrmnCrsjeWguqYy6a2F9VQNC48R3Zb7UuMv8CrC2LhjyfFa1vNnuH",
+    "creator": "B9zFc3EbSVK6MApoRYU8RmnteMs8Tzqkx4U6VzJ2ME2Z",
+    "timestamp": "2024-07-21T14:00:31.483Z",
+    "pool_key": "3m23EXSc3xfopUm3hgB7qZ95du7HqH4AcLUhDpP54nU1",
+    "platform": false,
+    "baseInfo": {
+      "baseAddress": "51drGRfgi6UDYotkSUx5f46Kwijqh2gEaUct2fxTJtuf",
+      "baseDecimals": 9,
+      "baseLpAmount": 9700000000
+    }
+  },
+  {
+    "lpSignature": "5SRFwcezyyCGpUyQxDQ8egX9eJ1Sh5wtjir3VtSDGuhTaiumqmE2H9R91VkjvKWs81qFEwXGoSNE6AcgaPuNDr2y",
+    "creator": "3Dm5GP8aXWL9JJp2KtRCFDujwvoJjo6VjSfqrUMwHu9M",
+    "timestamp": "2024-07-21T14:02:10.789Z",
+    "pool_key": "5j6h9HvpfKUrV73LYQHD9PiNuzsUi3EhdwjwrRo4FpDw",
+    "platform": false,
+    "baseInfo": {
+      "baseAddress": "GmciqVmfJ2kV6FvgTVzHg13AQ9SqGSpg2EB3SrD7neZ8",
+      "baseDecimals": 6,
+      "baseLpAmount": 100000000
+    }
+  },
+  {
+    "lpSignature": "49VHyA8qstCKyE4EeXPnts3dHTnTNaw7J86kpPJQD5eXr3tQBgp5xBuRnVbTCzJUbRo5naUpWyBtRp9fpzX933sc",
+    "creator": "9r2vhxcWkVNnr1U1b22HsfvdeSFaRDxUuKAPTxwJsW8E",
+    "timestamp": "2024-07-21T14:02:54.171Z",
+    "pool_key": "3AVi9Tg9Uo68tJfuvoKvqKNWKkC5wPdSSdeBnizKZ6jT",
+    "platform": false,
+    "baseInfo": {
+      "baseAddress": "g3BeCvLMSXW3jaUD9j6NYzQARt3kgZzS4E7CGK8tXof",
+      "baseDecimals": 6,
+      "baseLpAmount": 1000000000
+    }
+  },
+  {
+    "lpSignature": "3TVhTZhrkpbvmkH5yMUK7DAE4GtEjuaaLmLq18o2oaYpKGsCMiwkybf9EUvPHmwPV6P58ibFMu4VY1g3aA1kyg2W",
+    "creator": "AT8ijC4QvFEfVudkCw5Vdb6pZBzDsStCDT67myjpLdYB",
+    "timestamp": "2024-07-21T14:06:56.846Z",
+    "pool_key": "6twrSRmAitwybmTDDL8iQb9ZiRdKeSvy6Pv2bsgSpFob",
+    "platform": false,
+    "baseInfo": {
+      "baseAddress": "9BQQUj8ai68mMWexfwhUqySmfV7XDTqSasXc2LcXRo8z",
+      "baseDecimals": 6,
+      "baseLpAmount": 950000000
+    }
+  },
+  {
+    "lpSignature": "U1rVGtMbQXpyZi1t3ftLfXJPv9wtvhbvxkd19RJbTnCtVdoPGysyqxQp36QjSBLPpSf6cUYTtfEWcnLCPBp25Pg",
+    "creator": "Ht2kxXVPBfASgEvkM2zSMzWo2E4heRn2oEwAayXMALwv",
+    "timestamp": "2024-07-21T14:09:55.836Z",
+    "pool_key": "851Dc56agu5Xn3tMnSLsFanPyZ8DhLSCFeLBnRFQJCyM",
+    "platform": false,
+    "baseInfo": {
+      "baseAddress": "GfHaRe5fHEmZuzW3DQ3rGHMa9MJoofaMhRskzXXdQdEN",
+      "baseDecimals": 6,
+      "baseLpAmount": 100000000
+    }
+  },
+  {
+    "lpSignature": "3W33vjzMUDasw83WChUdfpL8DSHdWBDhuPoXmmfeAoRhJaedUrV4DSJ58mHvUWQaoFCLNpYBNr2eWvvDtVvFSY23",
+    "creator": "9i1782ybhqLxw59bAD3DGVNqXG8t6tJhDT7zCnHuJvfQ",
+    "timestamp": "2024-07-21T14:17:23.816Z",
+    "pool_key": "H4TPQ9uswgTvv2ds81bS2yDjcR5tXMZDYxLZWW2WL63n",
+    "platform": false,
+    "baseInfo": {
+      "baseAddress": "2MXYAYnhUsgxx52ADfiZA7dKAyCq9mc2DGDjzmAS66Pw",
+      "baseDecimals": 9,
+      "baseLpAmount": 1000000000
+    }
+  },
+  {
+    "lpSignature": "2RajZQPuCDdT54c5gZU6sqrrhE8kiykQ9HuxVH42yi8WVqk6jQP6eCr2CijM43WyJW47JP9JBRGJqrF3cJ4BFQV4",
+    "creator": "Etswfn7ezvD1tia3Dn1GsqaWJjNiCyXiEytymWQEKhXd",
+    "timestamp": "2024-07-21T14:19:48.653Z",
+    "pool_key": "Cqzriz4Gj5wLAMwh3NXnTfcF4bDUAtNBmEyTbQv1DP24",
+    "platform": false,
+    "baseInfo": {
+      "baseAddress": "8PXE8z62bz4QHbafyBm7eZYGypyNfXe7yWVDgTmt64fa",
+      "baseDecimals": 9,
+      "baseLpAmount": 2000000
+    }
+  },
+  {
+    "lpSignature": "3sHdzYxjCpvhwnV8PfKy5aqT1CK27EqWde7Fteug5MC76PtRd1tYxjUU3hQr5WT4VosB28fbmJnrT5xwR8JxpzuL",
+    "creator": "FDmsdFL9msdMGXLiuhxNGmSSFQaSSmPdmKKrc6nvVPGc",
+    "timestamp": "2024-07-21T14:19:48.888Z",
+    "pool_key": "J23Wk6mxxtUpWfDCYpTnWQqTwfVv7gaMjzga9KgCt3xF",
+    "platform": false,
+    "baseInfo": {
+      "baseAddress": "4BVc26oVVpzUunLcd2s2zabAaGscGeocFW3EWKBpEBRW",
+      "baseDecimals": 8,
+      "baseLpAmount": 1000000000
+    }
+  },
+  {
+    "lpSignature": "ES18pSLa3ihfd56GTE3oRT843k1JRhiuF8ErmiArepyBNbigaMPiaiWsJzaBVMssrzunGabcgMyKU3nGmH7yAzs",
+    "creator": "8uzb2jLrfFn6PtQPgJfPivY6zwq2f2UHdPUV7wmbtvnu",
+    "timestamp": "2024-07-21T14:25:45.538Z",
+    "pool_key": "D2t5Mibqh4vgWYWyxj2UCpebjXCLW4VTgWWJ2sW7rXRj",
+    "platform": false,
+    "baseInfo": {
+      "baseAddress": "4Bhv8y5LtG3x3hcwAd48xeN1SseXJPRsQGJSmEaDPyMk",
+      "baseDecimals": 9,
+      "baseLpAmount": 9800000000
+    }
   }
 ]

@@ -1,10 +1,9 @@
 
 import chalk from 'chalk';
-import { storeData } from './utils.js';
-import { readData } from './dexScreener.js';
+import { storeData,storeResultsData } from './utils.js';
+import { readData,readFailedTxn } from './dexScreener.js';
 import { rayFee, solanaConnection,getTokenPlatform } from './constants.js';
-import { parsingTxn } from './parsingTxn.js'
-import { dataPath,nonPumpPath } from './constants.js';
+import { dataPath,nonPumpPath,failedTxnPath } from './constants.js';
 
 
 async function monitorNewTokens(connection) {
@@ -63,9 +62,11 @@ async function monitorNewTokens(connection) {
             }else{
               console.log("Error parsedTransaction");
               console.log(JSON.stringify(parsedTransaction));
+              storeResultsData(failedTxnPath,signature)
             }
           }catch(err){
             console.log(chalk.red("catch parsing ",signature));
+            storeResultsData(failedTxnPath,signature)
           }
           console.log(`problem maybe`);
           let platform = getTokenPlatform(signer);
@@ -85,9 +86,6 @@ async function monitorNewTokens(connection) {
             storeData(dataPath, newTokenData);
             console.log(`everything is good`);
           }
-          else {
-            storeData(nonPumpPath, newTokenData);
-          }
         } catch (error) {
           const errorMessage = `error occured in new solana token log callback function, ${JSON.stringify(error, null, 2)}`;
           console.log(errorMessage);
@@ -106,6 +104,9 @@ setInterval(()=>{
     readData();
 },120000);
 
+setInterval(()=>{
+  readFailedTxn();
+},60000);
 
 
 // async function monitorNewTokens(connection) {
