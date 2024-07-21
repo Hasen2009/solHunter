@@ -1,17 +1,5 @@
 [
   {
-    "lpSignature": "fBJL3eLmKyPKkj9zjk1wcv5kJTa8wSxCKoDTsMHq52VdF97Sbbwsi8mrJVtkpfoaLiZo5EHy4utJFeecThShmXw",
-    "creator": "39azUYFWPz3VHgKCf3VChUwbpURdCHRxjWVowf5jUJjg",
-    "timestamp": "2024-07-20T17:26:22.152Z",
-    "pool_key": "EDZNBt9cLBtK3vfBFughsvz5mAPhhy5RhUpgombs3iY4",
-    "platform": "pumpFun",
-    "baseInfo": {
-      "baseAddress": "FmqUsSPokDraqTbZerygKCev2UuTedsMrhjJ16Vzpump",
-      "baseDecimals": 6,
-      "baseLpAmount": 206900000
-    }
-  },
-  {
     "lpSignature": "2wLp3K3V4m8hJKuxuZYHqSmwn7KbuqaLHq7DpcBiaKgDF37qF1qDdJH9YE2w5QtsWWrUVdYqHmobqTQGCdKgHHvK",
     "creator": "39azUYFWPz3VHgKCf3VChUwbpURdCHRxjWVowf5jUJjg",
     "timestamp": "2024-07-20T17:30:59.113Z",

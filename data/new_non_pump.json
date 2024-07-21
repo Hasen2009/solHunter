@@ -9617,5 +9617,17 @@
       "baseDecimals": 0,
       "baseLpAmount": 0
     }
+  },
+  {
+    "lpSignature": "3XsQW9h35d2D74HnCFehxixkSMbzMygntko1ggLN9HceKeUgsBQxjMgDroiZxSBQeHRa58KWy9ezw7mih78gmMzZ",
+    "creator": "74j8YtwbkG4DjW8X5RNrKgZJVHiFqbWgJ852Sp68fWix",
+    "timestamp": "2024-07-20T18:28:03.563Z",
+    "pool_key": "4m521C5bef6wGyh2ttPN3rTXt3LSpUba2HfqWGJdhLZc",
+    "platform": false,
+    "baseInfo": {
+      "baseAddress": "B99nNpNn7xtUTogX6udLbFHfhGWbaibMerD1cx2DHA7a",
+      "baseDecimals": 6,
+      "baseLpAmount": 1000000000
+    }
   }
 ]

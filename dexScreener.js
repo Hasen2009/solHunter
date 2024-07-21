@@ -92,7 +92,7 @@ async function dexScreenerAPICall(tokenStoredData,token,tempTokenData){
                 tokenProps  
             ]
             console.table(displayData);
-            if(score >=3){
+            if(score >=2){
                 await sendTelegramMsg(tokenProps);
                 storeResultsData(botPath,tokenProps);
                 console.log(chalk.bgRed("Token score above 2 and ready to send", token));
