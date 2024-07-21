@@ -88,7 +88,7 @@ export function tokenScore(token){
   (token.volume >= 10000) ? score++ : 0;
   // (token.rayPct <= 20 && token.rayPct >= 10) ? score++ : 0 ;
   // (token.txn24 >=500 && token.tokenAccounts >=500) ? score++ : 0;
-  (token.top10Pct < 55 && token.top10Pct >= 29 && rayPctFromTop10Pct <= 50 && token.rayPct <= 20 )? score++ : 0;
+  (token.top10Pct <= 55  && rayPctFromTop10Pct <= 50 && token.rayPct <= 20 )? score++ : 0;
   (token.symbol.length <= 6 && token.symbol.length > 2 && token.symbol == token.name)? score++ : 0;
   // (token.symbol == token.name )? score++ : 0;
   return score;
@@ -101,7 +101,7 @@ export function tokenPreCheck(token){
     deleteData(token.address);
     return false;
   }
-  return (token.tokenAccounts >=300 && token.top10Pct <= 55 && token.top10Pct >= 29 && rayPctFromTop10Pct <= 45 && token.rayPct <= 25) ? true : false
+  return (token.tokenAccounts >=300 && token.top10Pct <= 55 && rayPctFromTop10Pct <= 45 && token.rayPct <= 25) ? true : false
 }
 
 export function deleteData(tokenAddress){
