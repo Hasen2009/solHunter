@@ -1,6 +1,6 @@
 import { httpPumpFun } from './constants.js'
 
-async function getMetaData(tokenAddress){
+export async function getMetaData(tokenAddress){
     let response = await httpPumpFun.get(tokenAddress);
     let metaData = {
         image : response.data["image_uri"],
