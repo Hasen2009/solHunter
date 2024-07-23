@@ -1,16 +1,13 @@
 import fs from 'fs';
 import chalk from 'chalk';
-import axios from 'axios';
 import { storeData,replaceData,tokenTimeCheck ,tokenScore, tokenPreCheck,deleteData,tokenDeleteTimeCheck,storeResultsData} from './utils.js';
 import { sendTelegramMsg } from './tgBot.js'
 import { findTotalHolders } from './findTotalHolders.js'
 import { holdersPercentage } from './holders.js';
-import { dataPath,rejectedTokensPath,botPath,failedTxnPath } from './constants.js';
+import { dataPath,rejectedTokensPath,botPath,failedTxnPath,http } from './constants.js';
 import { stringify } from 'querystring';
 import { parsingTxn } from './parsingTxn.js'
-const http = axios.create({
-    baseURL : 'https://api.dexscreener.com/latest/dex'
-})
+import { getMetaData } from './metaData.js'
 
 // check Token if its pass the algorithim or not by connecting dexscreener api
 // checking if token creation time older than time specified which is 10 minutes now
@@ -70,13 +67,14 @@ async function dexScreenerAPICall(tokenStoredData,token,tempTokenData){
                 supply : 0,
                 rayPct : 0,
                 top10Pct : 0,
-                score : 0
+                score : 0,
+                metaData : {}
             }
             let displayData1 = [
                 tokenProps  
             ]
             console.log(chalk.bgGreen("Token dex call before check mc and score"));
-            console.table(chalk.bgRed(displayData1));
+            console.table(chalk.bgRed(JSON.stringify(displayData1)));
 
         // token detection algorithim 
         if (tokenProps.fdv <= 100000 && tokenProps.fdv >= 20000 && tokenProps.volume >= 10000){
@@ -94,6 +92,10 @@ async function dexScreenerAPICall(tokenStoredData,token,tempTokenData){
             ]
             console.table(displayData);
             if(score >=2){
+                if(tokenProps.platform == "pumpFun"){
+                    let metaData = await getMetaData(tokenProps.address);
+                    tokenProps.metaData = metaData;
+                }
                 await sendTelegramMsg(tokenProps);
                 storeResultsData(botPath,tokenProps);
                 console.log(chalk.bgRed("Token score above 2 and ready to send", token));
