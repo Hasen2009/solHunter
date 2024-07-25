@@ -70,3 +70,21 @@ export async function holdersPercentage(tokenAddress){
     return displayData;
 }
 
+export async function creatorHolding(creator,address){
+  let token = new PublicKey(address);
+  let creatorAdd = new PublicKey(creator)
+  try{
+    let creatorHolding = await solanaConnection.getParsedTokenAccountsByOwner (creatorAdd,
+      {
+        mint: token,
+      },
+      {
+        encoding: "jsonParsed",
+      }
+      );
+      let creatorAmount = creatorHolding.value[0].account.data.parsed.info.tokenAmount.uiAmount;
+      return ( creatorAmount > 1000000 )  ? true : false;
+  }catch(err){
+    console.log(err.message);
+  }
+}

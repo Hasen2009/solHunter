@@ -3,7 +3,7 @@ import chalk from 'chalk';
 import { storeData,replaceData,tokenTimeCheck ,tokenScore, tokenPreCheck,deleteData,tokenDeleteTimeCheck,storeResultsData} from './utils.js';
 import { sendTelegramMsg } from './tgBot.js'
 import { findTotalHolders } from './findTotalHolders.js'
-import { holdersPercentage } from './holders.js';
+import { holdersPercentage,creatorHolding } from './holders.js';
 import { dataPath,rejectedTokensPath,botPath,failedTxnPath,http } from './constants.js';
 import { stringify } from 'querystring';
 import { parsingTxn } from './parsingTxn.js'
@@ -47,8 +47,10 @@ async function dexScreenerAPICall(tokenStoredData,token,tempTokenData){
         });
         // filtering token data from api response
         let pair = tokenData.data.pairs[0];
+        let tokenImage = pair?.info?.imageUrl;
         let tokenProps = {
                 address: pair.baseToken.address,
+                image : tokenImage,
                 name : pair.baseToken.name,
                 symbol : pair.baseToken.symbol,
                 poolKey : tokenStoredData.pool_key,
@@ -68,7 +70,8 @@ async function dexScreenerAPICall(tokenStoredData,token,tempTokenData){
                 rayPct : 0,
                 top10Pct : 0,
                 score : 0,
-                metaData : {}
+                metaData : {},
+                devSold : true
             }
             let displayData1 = [
                 tokenProps  
@@ -94,6 +97,8 @@ async function dexScreenerAPICall(tokenStoredData,token,tempTokenData){
             if(score >=2){
                 if(tokenProps.platform == "pumpFun"){
                     let metaData = await getMetaData(tokenProps.address);
+                    let devSold = await creatorHolding(metaData.creator,tokenProps.address);
+                    tokenProps.devSold = devSold;
                     tokenProps.metaData = metaData;
                 }
                 await sendTelegramMsg(tokenProps);
