@@ -82,7 +82,7 @@ export async function creatorHolding(creator,address){
         encoding: "jsonParsed",
       }
       );
-      let creatorAmount = creatorHolding.value[0].account.data.parsed.info.tokenAmount.uiAmount;
+      let creatorAmount = creatorHolding?.value[0]?.account.data.parsed.info.tokenAmount.uiAmount;
       return ( creatorAmount > 1000000 )  ? true : false;
   }catch(err){
     console.log(err.message);

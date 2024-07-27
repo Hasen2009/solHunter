@@ -4,7 +4,9 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import axios from 'axios';
 
-
+export const authToken = '7244419453:AAFqYKkmNY2O_QrQrzMXpN8VC3YvvfR1xok';
+export const chat_id = '45717611' //bot id;
+export const firstChatId = "-1002198435565" ; // group
 dotenv.config();
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
 const __dirname = path.dirname(__filename); // get the name of the directory
@@ -14,6 +16,7 @@ export const botPath = path.join(__dirname, 'data', 'bot_results.json');
 export const nonPumpPath = path.join(__dirname, 'data', 'new_non_pump.json');
 export const rejectedTokensPath = path.join(__dirname, 'data', 'rejected_tokens.json');
 export const failedTxnPath = path.join(__dirname, 'data', 'failed_txn.json');
+export const filterTokens = path.join(__dirname, 'data', 'filter_tokens.json'); 
 export const http = axios.create({
   baseURL : 'https://api.dexscreener.com/latest/dex'
 });

@@ -1,20 +1,14 @@
+
+import {filterTokens,chat_id,http} from './constants.js'
+import {deleteFilterToken,tokenFullTimeCheck,tokenFullDeleteTimeCheck,tokenFullScore} from './utils.js';
+import { sendTelegramMsg } from './tgBot.js'
 import fs from 'fs';
 import chalk from 'chalk';
-import { tokenTimeCheck ,tokenScore, tokenPreCheck,deleteData,tokenDeleteTimeCheck,storeResultsData} from './utils.js';
-import { sendTelegramMsg } from './tgBot.js'
 import { findTotalHolders } from './findTotalHolders.js'
 import { holdersPercentage,creatorHolding } from './holders.js';
-import { dataPath,rejectedTokensPath,botPath,failedTxnPath,http,filterTokens,firstChatId } from './constants.js';
-import { stringify } from 'querystring';
-import { parsingTxn } from './parsingTxn.js'
 import { getMetaData } from './metaData.js'
-
-// check Token if its pass the algorithim or not by connecting dexscreener api
-// checking if token creation time older than time specified which is 10 minutes now
-// exctract data for passed tokens and stored in another json file
 async function checkToken(tokenStoredData,token,holdersPercentages){
     let tokenAccounts = await findTotalHolders(tokenStoredData.baseInfo.baseAddress);
-    // console.log(token, holdersPercentages.top10Pct,tokenAccounts)
     // checking token age
         if(Number.isInteger(tokenAccounts)){
             let tempToken = {
@@ -24,13 +18,7 @@ async function checkToken(tokenStoredData,token,holdersPercentages){
                 supply : holdersPercentages.tokenTotalSupply,
                 address : tokenStoredData.baseInfo.baseAddress
             }    
-            let isTokenReady = tokenPreCheck(tempToken);
-            console.log('isTokenReady',isTokenReady);
-            console.log(JSON,stringify(tempToken));
-            if(isTokenReady){
-                console.log("isTokenReady", token)
-                dexScreenerAPICall(tokenStoredData,token,tempToken)
-            }
+            dexScreenerAPICall(tokenStoredData,token,tempToken)
         }
 };
 
@@ -78,53 +66,34 @@ async function dexScreenerAPICall(tokenStoredData,token,tempTokenData){
             console.table(chalk.bgRed(JSON.stringify(displayData1)));
 
         // token detection algorithim 
-        if (tokenProps.fdv <= 150000 && tokenProps.fdv >= 20000 && tokenProps.volume >= 10000){
-            console.log("Token Mc between 150K and 20K", token)
+        if (tokenProps.fdv <= 150000){
             tokenProps.supply = tempTokenData.supply;
             tokenProps.rayPct = tempTokenData.rayPct;
             tokenProps.top10Pct = tempTokenData.top10Pct;
             tokenProps.tokenAccounts = tempTokenData.tokenAccounts;
             tokenProps.ratio = Math.ceil(tokenProps.fdv/tokenProps.tokenAccounts);
 
-            let score = tokenScore(tokenProps);
+            let score = tokenFullScore(tokenProps);
             tokenProps.score = score;
-            let displayData = [
-                tokenProps  
-            ]
-            console.table(displayData);
-            if(score >=2){
+            if(score >=4){
+                console.log(score)
                 if(tokenProps.platform == "pumpFun"){
+                    console.log(tokenProps.platform)
                     let metaData = await getMetaData(tokenProps.address);
                     let devSold = await creatorHolding(metaData.creator,tokenProps.address);
                     tokenProps.devSold = devSold;
                     tokenProps.metaData = metaData;
                 }
-                await sendTelegramMsg(tokenProps,firstChatId);
-                storeResultsData(filterTokens,tokenStoredData);
-                storeResultsData(botPath,tokenProps);
-                console.log(chalk.bgRed("Token score above 2 and ready to send", token));
-                deleteData(tokenStoredData.baseInfo.baseAddress);
+                await sendTelegramMsg(tokenProps,chat_id);
+                console.log(chalk.bgRed("Token score above 4 and ready to send", token));
+                deleteFilterToken(tokenStoredData.lpSignature);
             }
-            // console.log(chalk.blue(JSON.stringify(tokenProps)));
         }else if(tokenProps.fdv < 20000){
-            console.log(chalk.bgRed("Token fdv less 20K", token));
+            console.log(chalk.bgRed("Filtered Token fdv less 20K", token));
             console.log(chalk.bgRed( JSON.stringify(tokenProps)));
-            deleteData(tokenStoredData.baseInfo.baseAddress);
-            storeResultsData(rejectedTokensPath,tokenProps);
+            deleteFilterToken(tokenStoredData.lpSignature);
         }
-        // else {
-        //     console.log('rejected token volume > 100K',token);
-        //     storeData(rejectedTokensPath,tokenProps);
-        //     console.log(chalk.bgRed(JSON.stringify(tokenProps)));
-        // }
-        
-        // else {
-        //     console.log('rejected token volume less than 20K',token);
-        //     storeData(rejectedTokensPath,tokenProps);
-        //     console.log(chalk.bgRed(JSON.stringify(tokenProps)));
-        // }
-        // return the token
-        // return tokenStoredData;
+
     }catch(err){
         console.log('something wrong with dexscreener',token);
         console.log(err.message);
@@ -133,12 +102,10 @@ async function dexScreenerAPICall(tokenStoredData,token,tempTokenData){
 };
 
 // readData is the main function to read data and store it
-export async function readData()  {
-    console.log(chalk.bgGreen("Start Reading Data"))
-    // console.log(chalk.yellow("Start Reading Data"));
-    let newTokenJson = [];
+export async function readAgain()  {
+    console.log(chalk.bgGreen("Second Bot Start Reading Data"))
     // read created token file to check it
-    fs.readFile (dataPath, (err, fileData) =>{
+    fs.readFile (filterTokens, (err, fileData) =>{
     if (err) {
       console.error(`Error reading file: ${err}`);
       return;
@@ -152,55 +119,19 @@ export async function readData()  {
       // annonymous function to use await for checkToken function
         (async function(){
             for await ( const token of json ){
-                let tokenBolean = tokenTimeCheck(token.timestamp);
-                let tokenDeleteTimeCheckBoolean = tokenDeleteTimeCheck(token.timestamp);
+                console.log(token.baseInfo.baseAddress)
+                let tokenBolean = tokenFullTimeCheck(token.timestamp);
+                let tokenFullDeleteTimeCheckBoolean = tokenFullDeleteTimeCheck(token.timestamp);
                 // if token age is smaller than 1 hour will be stored in new array in data file
                 if(tokenBolean){
                     let holdersPercentages = await holdersPercentage(token.baseInfo.baseAddress);
-                    // console.log(token,holdersPercentages.top10Pct,holdersPercentages.rayPct)
                     if(holdersPercentages.top10Pct <= 55 && holdersPercentages.rayPct <=30 ){
                         await checkToken(token,token.baseInfo.baseAddress,holdersPercentages);
-                        // newTokenJson.push(token);
                     }
-                }else if (!tokenDeleteTimeCheckBoolean){
-                    console.log("tokenBolean deleting", token.baseInfo.baseAddress);
-                    deleteData(token.baseInfo.baseAddress);
+                }else if (tokenFullDeleteTimeCheckBoolean){
+                    deleteFilterToken(token.lpSignature);
                 }
             }
-            // replace the token creation file with only unchecked ones
-            // replaceData(dataPath,newTokenJson);
-        })();
-      }
-    } catch (parseError) {
-      console.error(`Error parsing JSON from file: ${parseError}`);
-      return;
-    }
-  });
-}
-
-// readFailedTxn for reading failed transactions
-export async function readFailedTxn()  {
-    console.log(chalk.bgGreen("Start Reading failed txn"))
-    // console.log(chalk.yellow("Start Reading Data"));
-    // read created token file to check it
-    fs.readFile (failedTxnPath, (err, fileData) =>{
-    if (err) {
-      console.error(`Error reading file: ${err}`);
-      return;
-    }
-    let json = [];
-    try {
-      json = JSON.parse(fileData.toString());
-
-      // check length of data array
-      if(json.length > 0){
-      // annonymous function to use await for parsingTxn function
-        (async function(){
-            for await ( const signature of json ){
-                await parsingTxn(signature);
-            }
-            // replace the token creation file with only unchecked ones
-            // replaceData(dataPath,newTokenJson);
         })();
       }
     } catch (parseError) {

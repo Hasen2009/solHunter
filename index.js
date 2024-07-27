@@ -3,8 +3,8 @@ import chalk from 'chalk';
 import { storeData,storeResultsData } from './utils.js';
 import { readData,readFailedTxn } from './dexScreener.js';
 import { rayFee, solanaConnection,getTokenPlatform } from './constants.js';
-import { dataPath,nonPumpPath,failedTxnPath } from './constants.js';
-
+import { dataPath,failedTxnPath } from './constants.js';
+import {readAgain} from './secondBot.js';
 
 async function monitorNewTokens(connection) {
   console.log(chalk.green(`monitoring new solana tokens...`));
@@ -99,16 +99,18 @@ async function monitorNewTokens(connection) {
   }
 }
 monitorNewTokens(solanaConnection);
-// setInterval every 3 minutes checking dexscreener api
+// setInterval every 1.5 minutes checking dexscreener api
 setInterval(()=>{
     readData();
-},120000);
+},90000);
 
 setInterval(()=>{
   readFailedTxn();
 },60000);
 
-
+setInterval(()=>{
+  readAgain();
+},1200000);
 // async function monitorNewTokens(connection) {
 //   console.log(chalk.green(`monitoring new solana tokens...`));
 //   try {

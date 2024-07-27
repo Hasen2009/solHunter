@@ -154,17 +154,5 @@
       "baseDecimals": 6,
       "baseLpAmount": 206900000
     }
-  },
-  {
-    "lpSignature": "3ZhYaPXRSU1vfcQ9dfTs3vqkD3tWSxNNuvy6icw6i9mfEpYpi1xtbyJSweDEvbSiVXf2KEAMFjpioyPbKga2hrig",
-    "creator": "39azUYFWPz3VHgKCf3VChUwbpURdCHRxjWVowf5jUJjg",
-    "timestamp": "2024-07-27T21:44:37.731Z",
-    "pool_key": "AfwoZ4cHvcdShL5nVGD6sv4uzTTYDktSXoME1R37UeDb",
-    "platform": "pumpFun",
-    "baseInfo": {
-      "baseAddress": "6Gni19FJsmz8X26fNpWWHydYCTuj59WPqREMbNdzpump",
-      "baseDecimals": 6,
-      "baseLpAmount": 206900000
-    }
   }
 ]

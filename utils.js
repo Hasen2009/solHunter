@@ -1,6 +1,6 @@
 import fs from 'fs';
 import chalk from 'chalk';
-import { dataPath,failedTxnPath } from './constants.js';
+import { dataPath,failedTxnPath,filterTokens } from './constants.js';
 
 // storing data by reading the file and rewrite 
 export function storeData(dataFilePath, newData) {
@@ -55,7 +55,7 @@ export function replaceData(dataFilePath,leftData) {
 export function tokenTimeCheck(time){
     let currentTime = Math.ceil(Date.parse(new Date().toISOString())/1000);
     let tokenTime = Math.ceil(Date.parse(time)/1000);
-    return (currentTime - tokenTime >= 120 && currentTime - tokenTime <= 3600) ? true : false;
+    return (currentTime - tokenTime >= 90 && currentTime - tokenTime <= 3600) ? true : false;
 }
 
 export function tokenDeleteTimeCheck(time){
@@ -147,5 +147,50 @@ export function deleteFailedTxn(signature){
       }
     });
   });
+}
 
+export function tokenFullScore(token){
+  let score = 0;
+  let rayPctFromTop10Pct = Math.floor(token.rayPct/token.top10Pct * 100);
+
+  // (token.priceChange > 0)? score++ : 0;
+
+  if(token.ratio > 90 && token.txn24 >=1000 && token.tokenAccounts >=1000){
+    score++;
+  }
+
+  if(token.volume > token.fdv ){
+    score++;
+  }
+  (token.volume >= 1000000) ? score++ : 0;
+  // (token.rayPct <= 20 && token.rayPct >= 10) ? score++ : 0 ;
+  // (token.txn24 >=500 && token.tokenAccounts >=500) ? score++ : 0;
+  (token.top10Pct <= 55  && rayPctFromTop10Pct <= 50 && token.rayPct <= 20 )? score++ : 0;
+  (token.symbol.length <= 6 && token.symbol.length > 2 && token.symbol == token.name)? score++ : 0;
+  // (token.symbol == token.name )? score++ : 0;
+  return score;
+}
+
+export function tokenFullTimeCheck(time){
+  let currentTime = Math.ceil(Date.parse(new Date().toISOString())/1000);
+  let tokenTime = Math.ceil(Date.parse(time)/1000);
+  return (currentTime - tokenTime >= 3600 && currentTime - tokenTime <= 86400) ? true : false;
+}
+export function tokenFullDeleteTimeCheck(time){
+  let currentTime = Math.ceil(Date.parse(new Date().toISOString())/1000);
+  let tokenTime = Math.ceil(Date.parse(time)/1000);
+  return (currentTime - tokenTime >= 86400) ? true : false;
+}
+ 
+export function deleteFilterToken(signature){
+  try {
+    let json;
+    let data = fs.readFileSync(filterTokens);
+    json = JSON.parse(data.toString());
+    let newJson = json.filter((el)=>el.lpSignature != signature);
+    fs.writeFileSync(filterTokens,JSON.stringify(newJson, null, 2))
+  } catch (parseError) {
+    console.error(`Error parsing JSON from file: ${parseError}`);
+    return;
+  }
 }
