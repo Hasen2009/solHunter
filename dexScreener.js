@@ -24,13 +24,14 @@ async function checkToken(tokenStoredData,token,holdersPercentages){
                 supply : holdersPercentages.tokenTotalSupply,
                 address : tokenStoredData.baseInfo.baseAddress
             }    
-            let isTokenReady = tokenPreCheck(tempToken);
-            console.log('isTokenReady',isTokenReady);
-            console.log(JSON,stringify(tempToken));
-            if(isTokenReady){
-                console.log("isTokenReady", token)
-                dexScreenerAPICall(tokenStoredData,token,tempToken)
-            }
+            dexScreenerAPICall(tokenStoredData,token,tempToken)
+            // let isTokenReady = tokenPreCheck(tempToken);
+            // console.log('isTokenReady',isTokenReady);
+            // console.log(JSON,stringify(tempToken));
+            // if(isTokenReady){
+            //     console.log("isTokenReady", token)
+            //     dexScreenerAPICall(tokenStoredData,token,tempToken)
+            // }
         }
 };
 
@@ -78,8 +79,8 @@ async function dexScreenerAPICall(tokenStoredData,token,tempTokenData){
             console.table(chalk.bgRed(JSON.stringify(displayData1)));
 
         // token detection algorithim 
-        if (tokenProps.fdv <= 150000 && tokenProps.fdv >= 20000 && tokenProps.volume >= 10000){
-            console.log("Token Mc between 150K and 20K", token)
+        if (tokenProps.fdv >= 30000 && tokenProps.volume >= 10000){
+            console.log("Token Mc above 30K", token)
             tokenProps.supply = tempTokenData.supply;
             tokenProps.rayPct = tempTokenData.rayPct;
             tokenProps.top10Pct = tempTokenData.top10Pct;
@@ -92,14 +93,14 @@ async function dexScreenerAPICall(tokenStoredData,token,tempTokenData){
                 tokenProps  
             ]
             console.table(displayData);
-            if(score >=2){
+            if(score >=1){
                 if(tokenProps.platform == "pumpFun"){
                     let metaData = await getMetaData(tokenProps.address);
-                    let devSold = await creatorHolding(metaData.creator,tokenProps.address);
+                    let devSold = await creatorHolding(metaData.creator,tokenProps.address,tempTokenData.supply);
                     tokenProps.devSold = devSold;
                     tokenProps.metaData = metaData;
                 }
-                await sendTelegramMsg(tokenProps,firstChatId);
+                await sendTelegramMsg(tokenProps,firstChatId,5);
                 storeResultsData(filterTokens,tokenStoredData);
                 storeResultsData(botPath,tokenProps);
                 console.log(chalk.bgRed("Token score above 2 and ready to send", token));
@@ -157,18 +158,17 @@ export async function readData()  {
                 // if token age is smaller than 1 hour will be stored in new array in data file
                 if(tokenBolean){
                     let holdersPercentages = await holdersPercentage(token.baseInfo.baseAddress);
-                    // console.log(token,holdersPercentages.top10Pct,holdersPercentages.rayPct)
-                    if(holdersPercentages.top10Pct <= 55 && holdersPercentages.rayPct <=30 ){
+                    console.log(token,holdersPercentages.top10Pct,holdersPercentages.rayPct)
+                    if(holdersPercentages.top10Pct <= 60 || holdersPercentage.rayPct <=35 ){
                         await checkToken(token,token.baseInfo.baseAddress,holdersPercentages);
-                        // newTokenJson.push(token);
+                    }else{
+                        deleteData(token.baseInfo.baseAddress);
                     }
                 }else if (!tokenDeleteTimeCheckBoolean){
-                    console.log("tokenBolean deleting", token.baseInfo.baseAddress);
+                    console.log("tokenDeleteTimeCheckBoolean deleting", token.baseInfo.baseAddress);
                     deleteData(token.baseInfo.baseAddress);
                 }
             }
-            // replace the token creation file with only unchecked ones
-            // replaceData(dataPath,newTokenJson);
         })();
       }
     } catch (parseError) {
@@ -209,3 +209,4 @@ export async function readFailedTxn()  {
     }
   });
 }
+readFailedTxn()  

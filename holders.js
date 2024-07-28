@@ -70,7 +70,7 @@ export async function holdersPercentage(tokenAddress){
     return displayData;
 }
 
-export async function creatorHolding(creator,address){
+export async function creatorHolding(creator,address,supply){
   let token = new PublicKey(address);
   let creatorAdd = new PublicKey(creator)
   try{
@@ -83,7 +83,8 @@ export async function creatorHolding(creator,address){
       }
       );
       let creatorAmount = creatorHolding?.value[0]?.account.data.parsed.info.tokenAmount.uiAmount;
-      return ( creatorAmount > 1000000 )  ? true : false;
+      let devPct = Math.floor((creatorAmount/supply) * 100)
+      return ( devPct > 5 )  ? devPct : false;
   }catch(err){
     console.log(err.message);
   }

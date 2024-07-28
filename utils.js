@@ -73,7 +73,7 @@ export function tokenScore(token){
   if(token.tokenAccounts >  token.txn24 && token.ratio > 90 && token.txn24 >=200 && token.tokenAccounts >=200){
     score++;
   }else {
-    if(token.txn24 >=200 && token.tokenAccounts >=200 && token.ratio > 90) {
+    if(token.txn24 >=200 && token.tokenAccounts >=100 && token.ratio > 90) {
     let pctAcc = Math.floor(((token.txn24 - token.tokenAccounts)/ token.tokenAccounts) * 100);
 
     (pctAcc <= 20 && token.ratio > 90)? score++ : 0;
@@ -95,13 +95,7 @@ export function tokenScore(token){
 }
 
 export function tokenPreCheck(token){
-  let rayPctFromTop10Pct = Math.floor(token.rayPct/token.top10Pct * 100);
-  if(token.rayPct >= 60){
-    console.log("tokenPreCheck", token.address);
-    deleteData(token.address);
-    return false;
-  }
-  return (token.tokenAccounts >=200 && token.top10Pct <= 55 && rayPctFromTop10Pct <= 49 && token.rayPct <= 25) ? true : false
+  return (token.tokenAccounts >=100 && token.top10Pct <= 55 && rayPctFromTop10Pct <= 49 && token.rayPct <= 30) ? true : false
 }
 
 export function deleteData(tokenAddress){
@@ -155,18 +149,18 @@ export function tokenFullScore(token){
 
   // (token.priceChange > 0)? score++ : 0;
 
-  if(token.ratio > 90 && token.txn24 >=1000 && token.tokenAccounts >=1000){
+  if(token.txn24 >=1000 && token.tokenAccounts >=500){
     score++;
   }
 
-  if(token.volume > token.fdv ){
+  if(token.volume > token.fdv && token.volume >= 1000000 ){
     score++;
   }
-  (token.volume >= 1000000) ? score++ : 0;
+  // (token.volume >= 1000000) ? score++ : 0;
   // (token.rayPct <= 20 && token.rayPct >= 10) ? score++ : 0 ;
   // (token.txn24 >=500 && token.tokenAccounts >=500) ? score++ : 0;
-  (token.top10Pct <= 55  && rayPctFromTop10Pct <= 50 && token.rayPct <= 20 )? score++ : 0;
-  (token.symbol.length <= 6 && token.symbol.length > 2 && token.symbol == token.name)? score++ : 0;
+  (token.top10Pct <= 55  && rayPctFromTop10Pct <= 60 && token.rayPct <= 25 )? score++ : 0;
+  // (token.symbol.length <= 6 && token.symbol.length > 2 && token.symbol == token.name)? score++ : 0;
   // (token.symbol == token.name )? score++ : 0;
   return score;
 }

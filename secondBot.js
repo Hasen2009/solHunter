@@ -49,7 +49,7 @@ async function dexScreenerAPICall(tokenStoredData,token,tempTokenData){
                 priceChange5m : parseInt(pair.priceChange.m5),
                 liquidity : parseInt(pair.liquidity.usd),
                 fdv : parseInt(pair.fdv),
-                mc: (parseInt(pair.fdv)/1000) +"K",
+                mc: (parseInt(pair.fdv) < 1000000) ? (parseInt(pair.fdv)/1000) +"K" : (parseFloat(pair.fdv)/1000000).toFixed(2) +"M",
                 tokenAccounts : 0,
                 ratio : 0,
                 supply : 0,
@@ -63,10 +63,8 @@ async function dexScreenerAPICall(tokenStoredData,token,tempTokenData){
                 tokenProps  
             ]
             console.log(chalk.bgGreen("Token dex call before check mc and score"));
-            console.table(chalk.bgRed(JSON.stringify(displayData1)));
 
         // token detection algorithim 
-        if (tokenProps.fdv <= 150000){
             tokenProps.supply = tempTokenData.supply;
             tokenProps.rayPct = tempTokenData.rayPct;
             tokenProps.top10Pct = tempTokenData.top10Pct;
@@ -75,8 +73,9 @@ async function dexScreenerAPICall(tokenStoredData,token,tempTokenData){
 
             let score = tokenFullScore(tokenProps);
             tokenProps.score = score;
-            if(score >=4){
-                console.log(score)
+            console.log("FIltered Tokens")
+            console.table(chalk.bgRed(JSON.stringify(displayData1)));
+            if(score >=2){
                 if(tokenProps.platform == "pumpFun"){
                     console.log(tokenProps.platform)
                     let metaData = await getMetaData(tokenProps.address);
@@ -84,11 +83,11 @@ async function dexScreenerAPICall(tokenStoredData,token,tempTokenData){
                     tokenProps.devSold = devSold;
                     tokenProps.metaData = metaData;
                 }
-                await sendTelegramMsg(tokenProps,chat_id);
+                await sendTelegramMsg(tokenProps,chat_id,3);
                 console.log(chalk.bgRed("Token score above 4 and ready to send", token));
                 deleteFilterToken(tokenStoredData.lpSignature);
             }
-        }else if(tokenProps.fdv < 20000){
+        if(tokenProps.fdv < 20000){
             console.log(chalk.bgRed("Filtered Token fdv less 20K", token));
             console.log(chalk.bgRed( JSON.stringify(tokenProps)));
             deleteFilterToken(tokenStoredData.lpSignature);
@@ -119,7 +118,6 @@ export async function readAgain()  {
       // annonymous function to use await for checkToken function
         (async function(){
             for await ( const token of json ){
-                console.log(token.baseInfo.baseAddress)
                 let tokenBolean = tokenFullTimeCheck(token.timestamp);
                 let tokenFullDeleteTimeCheckBoolean = tokenFullDeleteTimeCheck(token.timestamp);
                 // if token age is smaller than 1 hour will be stored in new array in data file
@@ -127,6 +125,8 @@ export async function readAgain()  {
                     let holdersPercentages = await holdersPercentage(token.baseInfo.baseAddress);
                     if(holdersPercentages.top10Pct <= 55 && holdersPercentages.rayPct <=30 ){
                         await checkToken(token,token.baseInfo.baseAddress,holdersPercentages);
+                    }else{
+                        deleteFilterToken(token.lpSignature);
                     }
                 }else if (tokenFullDeleteTimeCheckBoolean){
                     deleteFilterToken(token.lpSignature);
