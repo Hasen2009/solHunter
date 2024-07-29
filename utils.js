@@ -79,17 +79,15 @@ export function tokenScore(token){
     let pctAcc = Math.floor(((token.txn24 - token.tokenAccounts)/ token.tokenAccounts) * 100);
     (pctAcc <= 30 && token.ratio > 90) ? score++ : 0;
   }}
-
-  
   if(token.volume > 100000 && token.fdv > 100000){
     score++;
   }else if(token.volume > token.fdv ){
     score++;
   }
-  // else {
-  //   let pct = Math.floor(((token.fdv - token.volume)/ token.volume) * 100);
-  //   pct <= 30 ? score++ : 0;
-  // }
+  else if((token.volume >= 50000 && token.fdv >= 50000)){
+    let pct = Math.floor(((token.fdv - token.volume)/ token.volume) * 100);
+    pct <= 30 ? score++ : 0;
+  }
   // (token.volume >= 10000) ? score++ : 0;
   // (token.rayPct <= 20 && token.rayPct >= 10) ? score++ : 0 ;
   // (token.txn24 >=500 && token.tokenAccounts >=500) ? score++ : 0;
