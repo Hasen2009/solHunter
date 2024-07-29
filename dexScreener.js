@@ -56,6 +56,7 @@ async function dexScreenerAPICall(tokenStoredData,token,tempTokenData){
                 platform : tokenStoredData.platform,
                 url : pair.url,
                 txn24: parseInt(pair.txns.h24.buys),
+                txn24Sells: parseInt(pair.txns.h24.sells),
                 volume : parseInt(pair.volume.h24),
                 volume5m : parseInt(pair.volume.m5),
                 priceChange : parseInt(pair.priceChange.h24),
@@ -70,13 +71,18 @@ async function dexScreenerAPICall(tokenStoredData,token,tempTokenData){
                 top10Pct : 0,
                 score : 0,
                 metaData : {},
-                devSold : true
+                devSold : true,
+                
             }
             let displayData1 = [
                 tokenProps  
             ]
+            let displayData2=[
+                tokenData.data.pairs[0]
+            ]
             console.log(chalk.bgGreen("Token dex call before check mc and score"));
             console.table(chalk.bgRed(JSON.stringify(displayData1)));
+            console.table(chalk.bgRed(JSON.stringify(displayData2)));
 
         // token detection algorithim 
         if (tokenProps.fdv >= 10000 && tokenProps.volume >= 10000 && tokenProps.fdv <= 300000 ){
@@ -100,7 +106,7 @@ async function dexScreenerAPICall(tokenStoredData,token,tempTokenData){
                     tokenProps.devSold = devSold;
                     tokenProps.metaData = metaData;
                 }
-                await sendTelegramMsg(tokenProps,firstChatId,3);
+                await sendTelegramMsg(tokenProps,firstChatId,4);
                 storeResultsData(filterTokens,tokenStoredData);
                 storeResultsData(botPath,tokenProps);
                 console.log(chalk.bgRed("Token score above 2 and ready to send", token));
