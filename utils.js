@@ -69,27 +69,35 @@ export function tokenScore(token){
   let rayPctFromTop10Pct = Math.floor(token.rayPct/token.top10Pct * 100);
 
   // (token.priceChange > 0)? score++ : 0;
-
-  if(token.tokenAccounts >  token.txn24 && token.ratio > 90 && token.txn24 >=200 && token.tokenAccounts >=200){
+  if(token.tokenAccounts >= 500 && token.ratio > 90){
+    console.log('1')
     score++;
-  }else {
-    if(token.txn24 >=200 && token.tokenAccounts >=100 && token.ratio > 90) {
+  }else if(token.tokenAccounts >  token.txn24 && token.ratio > 90 && token.tokenAccounts >=300){
+    console.log('2')
+    score++;
+  }
+  else {
+    console.log('3')
+    if(token.tokenAccounts >=300 && token.ratio > 90) {
     let pctAcc = Math.floor(((token.txn24 - token.tokenAccounts)/ token.tokenAccounts) * 100);
+    console.log(pctAcc);
 
-    (pctAcc <= 20 && token.ratio > 90)? score++ : 0;
+    (pctAcc <= 30 && token.ratio > 90) ? score++ : 0;
   }}
 
-  if(token.volume > token.fdv ){
+  if(token.volume > 100000 && token.fdv > 100000){
+    score++;
+  }else if(token.volume > token.fdv ){
     score++;
   }else {
     let pct = Math.floor(((token.fdv - token.volume)/ token.volume) * 100);
-    pct <=30 ? score++ : 0;
+    pct <= 30 ? score++ : 0;
   }
   (token.volume >= 10000) ? score++ : 0;
   // (token.rayPct <= 20 && token.rayPct >= 10) ? score++ : 0 ;
   // (token.txn24 >=500 && token.tokenAccounts >=500) ? score++ : 0;
-  (token.top10Pct <= 55  && rayPctFromTop10Pct <= 50 && token.rayPct <= 20 )? score++ : 0;
-  (token.symbol.length <= 6 && token.symbol.length > 2 && token.symbol == token.name)? score++ : 0;
+  (token.top10Pct <= 55 && token.rayPct <= 20 )? score++ : 0;
+  (token.symbol.trim().length <= 6 && token.symbol.trim().length > 2 && token.symbol.toUpperCase().trim() == token.name.toUpperCase().trim() )? score++ : 0;
   // (token.symbol == token.name )? score++ : 0;
   return score;
 }
