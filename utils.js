@@ -67,7 +67,7 @@ export function tokenDeleteTimeCheck(time){
 export function tokenScore(token){
   let score = 0;
   let rayPctFromTop10Pct = Math.floor(token.rayPct/token.top10Pct * 100);
-  let buyPressure = Math.floor(((txn24 - txn24Sells)/txn24 * 100));
+  let buyPressure = Math.floor(((token.txn24 - token.txn24Sells)/token.txn24 * 100));
 
   // (token.priceChange5m > 0)? score++ : 0;
   if(token.tokenAccounts >= 500 && token.ratio > 90){

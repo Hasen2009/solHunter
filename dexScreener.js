@@ -77,8 +77,8 @@ async function dexScreenerAPICall(tokenStoredData,token,tempTokenData){
             let displayData1 = [
                 tokenProps  
             ]
-            let displayData2=[
-                tokenData.data.pairs[0]
+            let displayData2 =[
+                pair
             ]
             console.log(chalk.bgGreen("Token dex call before check mc and score"));
             console.table(chalk.bgRed(JSON.stringify(displayData1)));
