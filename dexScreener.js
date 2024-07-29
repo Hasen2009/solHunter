@@ -93,7 +93,7 @@ async function dexScreenerAPICall(tokenStoredData,token,tempTokenData){
                 tokenProps  
             ]
             console.table(displayData);
-            if(score >=4){
+            if(score >=1){
                 if(tokenProps.platform == "pumpFun"){
                     let metaData = await getMetaData(tokenProps.address);
                     let devSold = await creatorHolding(metaData.creator,tokenProps.address,tempTokenData.supply);
