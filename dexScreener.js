@@ -79,7 +79,7 @@ async function dexScreenerAPICall(tokenStoredData,token,tempTokenData){
             console.table(chalk.bgRed(JSON.stringify(displayData1)));
 
         // token detection algorithim 
-        if (tokenProps.fdv >= 20000 && tokenProps.volume >= 10000){
+        if (tokenProps.fdv >= 10000 && tokenProps.volume >= 10000){
             console.log("Token Mc above 30K", token)
             tokenProps.supply = tempTokenData.supply;
             tokenProps.rayPct = tempTokenData.rayPct;
@@ -100,15 +100,15 @@ async function dexScreenerAPICall(tokenStoredData,token,tempTokenData){
                     tokenProps.devSold = devSold;
                     tokenProps.metaData = metaData;
                 }
-                await sendTelegramMsg(tokenProps,firstChatId,5);
+                await sendTelegramMsg(tokenProps,firstChatId,6);
                 storeResultsData(filterTokens,tokenStoredData);
                 storeResultsData(botPath,tokenProps);
                 console.log(chalk.bgRed("Token score above 2 and ready to send", token));
                 deleteData(tokenStoredData.baseInfo.baseAddress);
             }
             // console.log(chalk.blue(JSON.stringify(tokenProps)));
-        }else if(tokenProps.fdv < 20000){
-            console.log(chalk.bgRed("Token fdv less 20K", token));
+        }else if(tokenProps.fdv < 10000){
+            console.log(chalk.bgRed("Token fdv less 10K", token));
             console.log(chalk.bgRed( JSON.stringify(tokenProps)));
             deleteData(tokenStoredData.baseInfo.baseAddress);
             storeResultsData(rejectedTokensPath,tokenProps);
