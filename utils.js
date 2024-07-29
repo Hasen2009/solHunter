@@ -70,17 +70,13 @@ export function tokenScore(token){
 
   // (token.priceChange > 0)? score++ : 0;
   if(token.tokenAccounts >= 500 && token.ratio > 90){
-    console.log('1')
     score++;
   }else if(token.tokenAccounts >  token.txn24 && token.ratio > 90 && token.tokenAccounts >=300){
-    console.log('2')
     score++;
   }
   else {
-    console.log('3')
     if(token.tokenAccounts >=300 && token.ratio > 90) {
     let pctAcc = Math.floor(((token.txn24 - token.tokenAccounts)/ token.tokenAccounts) * 100);
-    console.log(pctAcc);
 
     (pctAcc <= 30 && token.ratio > 90) ? score++ : 0;
   }}

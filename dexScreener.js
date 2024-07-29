@@ -79,7 +79,7 @@ async function dexScreenerAPICall(tokenStoredData,token,tempTokenData){
             console.table(chalk.bgRed(JSON.stringify(displayData1)));
 
         // token detection algorithim 
-        if (tokenProps.fdv >= 30000 && tokenProps.volume >= 10000){
+        if (tokenProps.fdv >= 20000 && tokenProps.volume >= 10000){
             console.log("Token Mc above 30K", token)
             tokenProps.supply = tempTokenData.supply;
             tokenProps.rayPct = tempTokenData.rayPct;
@@ -93,7 +93,7 @@ async function dexScreenerAPICall(tokenStoredData,token,tempTokenData){
                 tokenProps  
             ]
             console.table(displayData);
-            if(score >=1){
+            if(score >=4){
                 if(tokenProps.platform == "pumpFun"){
                     let metaData = await getMetaData(tokenProps.address);
                     let devSold = await creatorHolding(metaData.creator,tokenProps.address,tempTokenData.supply);
