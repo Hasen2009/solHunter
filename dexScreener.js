@@ -93,14 +93,14 @@ async function dexScreenerAPICall(tokenStoredData,token,tempTokenData){
                 tokenProps  
             ]
             console.table(displayData);
-            if(score >=1){
+            if(score >=3){
                 if(tokenProps.platform == "pumpFun"){
                     let metaData = await getMetaData(tokenProps.address);
                     let devSold = await creatorHolding(metaData.creator,tokenProps.address,tempTokenData.supply);
                     tokenProps.devSold = devSold;
                     tokenProps.metaData = metaData;
                 }
-                await sendTelegramMsg(tokenProps,firstChatId,6);
+                await sendTelegramMsg(tokenProps,firstChatId,3);
                 storeResultsData(filterTokens,tokenStoredData);
                 storeResultsData(botPath,tokenProps);
                 console.log(chalk.bgRed("Token score above 2 and ready to send", token));

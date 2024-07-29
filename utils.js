@@ -80,6 +80,7 @@ export function tokenScore(token){
     (pctAcc <= 30 && token.ratio > 90) ? score++ : 0;
   }}
 
+  
   if(token.volume > 100000 && token.fdv > 100000){
     score++;
   }else if(token.volume > token.fdv ){
