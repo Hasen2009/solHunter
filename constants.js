@@ -17,6 +17,10 @@ export const nonPumpPath = path.join(__dirname, 'data', 'new_non_pump.json');
 export const rejectedTokensPath = path.join(__dirname, 'data', 'rejected_tokens.json');
 export const failedTxnPath = path.join(__dirname, 'data', 'failed_txn.json');
 export const filterTokens = path.join(__dirname, 'data', 'filter_tokens.json'); 
+export const successTokens = path.join(__dirname, 'data', 'success_tokens.json'); 
+export const collectedData = path.join(__dirname, 'data', 'data.json'); 
+
+
 export const http = axios.create({
   baseURL : 'https://api.dexscreener.com/latest/dex'
 });

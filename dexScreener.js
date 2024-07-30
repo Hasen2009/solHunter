@@ -4,8 +4,7 @@ import { tokenTimeCheck ,tokenScore, tokenPreCheck,deleteData,tokenDeleteTimeChe
 import { sendTelegramMsg } from './tgBot.js'
 import { findTotalHolders } from './findTotalHolders.js'
 import { holdersPercentage,creatorHolding } from './holders.js';
-import { dataPath,rejectedTokensPath,botPath,failedTxnPath,http,filterTokens,firstChatId } from './constants.js';
-import { stringify } from 'querystring';
+import { dataPath,rejectedTokensPath,botPath,failedTxnPath,http,filterTokens,firstChatId,successTokens } from './constants.js';
 import { parsingTxn } from './parsingTxn.js'
 import { getMetaData } from './metaData.js'
 
@@ -14,7 +13,6 @@ import { getMetaData } from './metaData.js'
 // exctract data for passed tokens and stored in another json file
 async function checkToken(tokenStoredData,token,holdersPercentages){
     let tokenAccounts = await findTotalHolders(tokenStoredData.baseInfo.baseAddress);
-    // console.log(token, holdersPercentages.top10Pct,tokenAccounts)
     // checking token age
         if(Number.isInteger(tokenAccounts)){
             let tempToken = {
@@ -74,14 +72,10 @@ async function dexScreenerAPICall(tokenStoredData,token,tempTokenData){
                 devSold : true,
                 
             }
-            let displayData1 = [
-                tokenProps  
-            ]
             let displayData2 =[
                 pair
             ]
             console.log(chalk.bgGreen("Token dex call before check mc and score"));
-            console.table(chalk.bgRed(JSON.stringify(displayData1)));
             console.table(chalk.bgRed(JSON.stringify(displayData2)));
 
         // token detection algorithim 
@@ -106,6 +100,10 @@ async function dexScreenerAPICall(tokenStoredData,token,tempTokenData){
                     tokenProps.devSold = devSold;
                     tokenProps.metaData = metaData;
                 }
+
+                if(score >= 3){
+                    storeResultsData(successTokens,tokenStoredData);
+                }
                 await sendTelegramMsg(tokenProps,firstChatId,4);
                 storeResultsData(filterTokens,tokenStoredData);
                 storeResultsData(botPath,tokenProps);
@@ -119,19 +117,6 @@ async function dexScreenerAPICall(tokenStoredData,token,tempTokenData){
             deleteData(tokenStoredData.baseInfo.baseAddress);
             storeResultsData(rejectedTokensPath,tokenProps);
         }
-        // else {
-        //     console.log('rejected token volume > 100K',token);
-        //     storeData(rejectedTokensPath,tokenProps);
-        //     console.log(chalk.bgRed(JSON.stringify(tokenProps)));
-        // }
-        
-        // else {
-        //     console.log('rejected token volume less than 20K',token);
-        //     storeData(rejectedTokensPath,tokenProps);
-        //     console.log(chalk.bgRed(JSON.stringify(tokenProps)));
-        // }
-        // return the token
-        // return tokenStoredData;
     }catch(err){
         console.log('something wrong with dexscreener',token);
         console.log(err.message);
@@ -187,7 +172,6 @@ export async function readData()  {
 // readFailedTxn for reading failed transactions
 export async function readFailedTxn()  {
     console.log(chalk.bgGreen("Start Reading failed txn"))
-    // console.log(chalk.yellow("Start Reading Data"));
     // read created token file to check it
     fs.readFile (failedTxnPath, (err, fileData) =>{
     if (err) {
@@ -215,4 +199,3 @@ export async function readFailedTxn()  {
     }
   });
 }
-readFailedTxn()  

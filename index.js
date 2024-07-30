@@ -4,8 +4,8 @@ import { storeData,storeResultsData } from './utils.js';
 import { readData,readFailedTxn } from './dexScreener.js';
 import { rayFee, solanaConnection,getTokenPlatform } from './constants.js';
 import { dataPath,failedTxnPath } from './constants.js';
-import {readAgain} from './secondBot.js';
-
+import { readAgain } from './secondBot.js';
+import { ReadingSuccessTokens } from './collectingData.js'
 async function monitorNewTokens(connection) {
   console.log(chalk.green(`monitoring new solana tokens...`));
   try {
@@ -111,6 +111,10 @@ setInterval(()=>{
 setInterval(()=>{
   readAgain();
 },1200000);
+
+setInterval(()=>{
+  ReadingSuccessTokens();
+},60000);
 // async function monitorNewTokens(connection) {
 //   console.log(chalk.green(`monitoring new solana tokens...`));
 //   try {

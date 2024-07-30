@@ -29,15 +29,26 @@ async function topHolders(tokenAdress){
   try{
     let top10Holders = (await solanaConnection.getTokenLargestAccounts (token ,'finalized')).value.slice(0,10);
     let topHoldersAmount = 0;
+    let tempData = [];
+
     top10Holders.forEach((account)=>{
       topHoldersAmount += account.uiAmount;
+      let currentAccount = {
+        address : account.address,
+        uiAmount : account.uiAmount
+      };
+      tempData.push(currentAccount);
     })
-    return (topHoldersAmount > 0) ? topHoldersAmount : 0 ;
+    let data = {
+      topHoldersAmount,
+      top10HoldersList : tempData
+    }
+    return (data.topHoldersAmount > 0) ? data : 0 ;
   }catch(err){
     console.log(err.message);
   }
 }
-
+ 
 async function tokenSupply(tokenAddress){
   try{
     let token = new PublicKey(tokenAddress);
@@ -56,15 +67,14 @@ export async function holdersPercentage(tokenAddress){
     let tokenTotalSupply = await tokenSupply(tokenAddress);
     let rayAmount = await RayHoldAMount(tokenAddress);
     let top10Holders = await topHolders(tokenAddress);
-    // console.log(tokenTotalSupply,rayAmount,top10Holders);
-
     let rayPct = Math.floor((rayAmount/tokenTotalSupply) * 100);
-    let top10Pct = Math.floor((top10Holders/tokenTotalSupply) * 100);
-
+    let top10Pct = Math.floor((top10Holders.topHoldersAmount/tokenTotalSupply) * 100);
+    let top10HoldersList = top10Holders.top10HoldersList
     let displayData = {
         tokenTotalSupply,
         rayPct,
-        top10Pct
+        top10Pct,
+        top10HoldersList
     }
 
     return displayData;

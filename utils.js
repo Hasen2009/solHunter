@@ -1,6 +1,6 @@
 import fs from 'fs';
 import chalk from 'chalk';
-import { dataPath,failedTxnPath,filterTokens } from './constants.js';
+import { dataPath,failedTxnPath,filterTokens,successTokens } from './constants.js';
 
 // storing data by reading the file and rewrite 
 export function storeData(dataFilePath, newData) {
@@ -57,6 +57,11 @@ export function tokenTimeCheck(time){
     let tokenTime = Math.ceil(Date.parse(time)/1000);
     return (currentTime - tokenTime >= 90 && currentTime - tokenTime <= 3600) ? true : false;
 }
+// export function collectTimeCheck(time){
+//   let currentTime = Math.ceil(Date.parse(new Date().toISOString())/1000);
+//   let tokenTime = Math.ceil(Date.parse(time)/1000);
+//   return (currentTime - tokenTime >= 90 && currentTime - tokenTime <= 3600) ? true : false;
+// }
 
 export function tokenDeleteTimeCheck(time){
   let currentTime = Math.ceil(Date.parse(new Date().toISOString())/1000);
@@ -148,7 +153,30 @@ export function deleteFailedTxn(signature){
     });
   });
 }
+export function deleteSuccessToken(address){
+  console.log('deleting Success Token broo');
+  console.log(chalk.bgRed(address));
+  fs.readFile(successTokens, (err, fileData) => {
+    if (err) {
+      console.error(`Error reading file: ${err}`);
+      return;
+    }
+    let json;
+    try {
+      json = JSON.parse(fileData.toString());
+    } catch (parseError) {
+      console.error(`Error parsing JSON from file: ${parseError}`);
+      return;
+    }
+    let newJson = json.filter((el)=>el.baseInfo.baseAddress != address);
 
+    fs.writeFile(successTokens, JSON.stringify(newJson, null, 2), (writeErr) => {
+      if (writeErr) {
+        console.error(`Error writing file: ${writeErr}`);
+      }
+    });
+  });
+}
 export function tokenFullScore(token){
   let score = 0;
   let rayPctFromTop10Pct = Math.floor(token.rayPct/token.top10Pct * 100);
