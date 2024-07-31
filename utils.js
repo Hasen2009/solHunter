@@ -32,7 +32,7 @@ export function storeResultsData(dataFilePath, newData) {
     }
     json.push(newData);
 
-    fs.writeFile(dataFilePath, JSON.stringify(json, null, 2),{encoding: "utf8",} ,(writeErr) => {
+    fs.writeFile(dataFilePath, JSON.stringify(json, null, 2),{encoding: "utf8"} ,(writeErr) => {
       if (writeErr) {
         console.error(`Error writing file: ${writeErr}`);
       }
@@ -170,7 +170,7 @@ export function deleteSuccessToken(address){
     }
     let newJson = json.filter((el)=>el.baseInfo.baseAddress != address);
 
-    fs.writeFile(successTokens,"utf8", JSON.stringify(newJson, null, 2), (writeErr) => {
+    fs.writeFile(successTokens, JSON.stringify(newJson, null, 2),{encoding: "utf8"}, (writeErr) => {
       if (writeErr) {
         console.error(`Error writing file: ${writeErr}`);
       }
