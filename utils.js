@@ -154,28 +154,19 @@ export function deleteFailedTxn(signature){
   });
 }
 export function deleteSuccessToken(address){
-  console.log('deleting Success Token broo');
   console.log(chalk.bgRed(address));
-  fs.readFile(successTokens,"utf8", (err, fileData) => {
-    if (err) {
-      console.error(`Error reading file: ${err}`);
-      return;
-    }
-    let json;
+  console.log('deleting broo')
     try {
-      json = JSON.parse(fileData.toString());
+      let json;
+      let data = fs.readFileSync(successTokens);
+      json = JSON.parse(data.toString());
+      let newJson = json.filter((el)=>el.baseInfo.baseAddress != address);
+      fs.writeFileSync(successTokens,JSON.stringify(newJson, null, 2))
     } catch (parseError) {
+      console.log('error deleting Success Token broo');
       console.error(`Error parsing JSON from file: ${parseError}`);
       return;
     }
-    let newJson = json.filter((el)=>el.baseInfo.baseAddress != address);
-
-    fs.writeFile(successTokens, JSON.stringify(newJson, null, 2),{encoding: "utf8"}, (writeErr) => {
-      if (writeErr) {
-        console.error(`Error writing file: ${writeErr}`);
-      }
-    });
-  });
 }
 export function tokenFullScore(token){
   let score = 0;
@@ -221,4 +212,29 @@ export function deleteFilterToken(signature){
     console.error(`Error parsing JSON from file: ${parseError}`);
     return;
   }
+}
+
+
+function temp(address){
+  fs.readFile(successTokens,"utf8", (err, fileData) => {
+    if (err) {
+      console.error(`Error reading file: ${err}`);
+      return;
+    }
+    let json;
+    try {
+      json = JSON.parse(fileData.toString());
+    } catch (parseError) {
+      console.log("start deleteSuccessToken")
+      console.error(`Error parsing JSON from file: ${parseError}`);
+      return;
+    }
+    let newJson = json.filter((el)=>el.baseInfo.baseAddress != address);
+
+    fs.writeFile(successTokens, JSON.stringify(newJson, null, 2),{encoding: "utf8"}, (writeErr) => {
+      if (writeErr) {
+        console.error(`Error writing file: ${writeErr}`);
+      }
+    });
+  });
 }
