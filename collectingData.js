@@ -77,8 +77,7 @@ async function collectingData(tokenStoredData){
 }
 export async function ReadingSuccessTokens(){
     console.log(chalk.bgGreen("Start Collecting Data"))
-
-    fs.readFile (successTokens, (err, fileData) =>{
+    fs.readFile (successTokens,"utf8", (err, fileData) =>{
     if (err) {
       console.error(`Error reading file: ${err}`);
       return;

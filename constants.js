@@ -19,6 +19,7 @@ export const failedTxnPath = path.join(__dirname, 'data', 'failed_txn.json');
 export const filterTokens = path.join(__dirname, 'data', 'filter_tokens.json'); 
 export const successTokens = path.join(__dirname, 'data', 'success_tokens.json'); 
 export const collectedData = path.join(__dirname, 'data', 'data.json'); 
+export const test = path.join(__dirname, 'data', 'test.json'); 
 
 
 export const http = axios.create({

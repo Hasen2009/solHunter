@@ -18,7 +18,7 @@ export function storeData(dataFilePath, newData) {
 }
 
 export function storeResultsData(dataFilePath, newData) {
-  fs.readFile(dataFilePath, (err, fileData) => {
+  fs.readFile(dataFilePath,"utf8", (err, fileData) => {
     if (err) {
       console.error(`Error reading file: ${err}`);
       return;
@@ -32,7 +32,7 @@ export function storeResultsData(dataFilePath, newData) {
     }
     json.push(newData);
 
-    fs.writeFile(dataFilePath, JSON.stringify(json, null, 2), (writeErr) => {
+    fs.writeFile(dataFilePath, JSON.stringify(json, null, 2),{encoding: "utf8",} ,(writeErr) => {
       if (writeErr) {
         console.error(`Error writing file: ${writeErr}`);
       }
@@ -156,7 +156,7 @@ export function deleteFailedTxn(signature){
 export function deleteSuccessToken(address){
   console.log('deleting Success Token broo');
   console.log(chalk.bgRed(address));
-  fs.readFile(successTokens, (err, fileData) => {
+  fs.readFile(successTokens,"utf8", (err, fileData) => {
     if (err) {
       console.error(`Error reading file: ${err}`);
       return;
@@ -170,7 +170,7 @@ export function deleteSuccessToken(address){
     }
     let newJson = json.filter((el)=>el.baseInfo.baseAddress != address);
 
-    fs.writeFile(successTokens, JSON.stringify(newJson, null, 2), (writeErr) => {
+    fs.writeFile(successTokens,"utf8", JSON.stringify(newJson, null, 2), (writeErr) => {
       if (writeErr) {
         console.error(`Error writing file: ${writeErr}`);
       }
